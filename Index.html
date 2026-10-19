@@ -1,0 +1,1603 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Meu Plano 2027</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=Nunito:wght@400;500;600;700;800&display=swap">
+<style>
+  /* Layout: app de uma coluna com barra de abas embaixo. Paleta algodão-doce: rosa suave, azul-céu e amarelo-manteiga sobre fundo rosado claro, com texto azul-marinho suave. */
+  :root{
+    color-scheme:light;
+    --bg:#FFF8F6; --surface:#FFFFFF; --surface-2:#FEEFF2; --ink:#2D3650; --ink-soft:#5B6580; --line:#F1DFE3;
+    --pink:#F5A9BB; --pink-soft:#FDE4EA; --pink-ink:#B73F63;
+    --sky:#BEE3F7; --sky-soft:#E6F4FC; --sky-ink:#1F5C80; --sky-dark:#7CC0E6;
+    --sun:#FFE6A1; --sun-soft:#FFF4D4; --sun-ink:#6A5000;
+    --hero:linear-gradient(135deg,#FBD3DD 0%,#FFE6BD 100%);
+    --danger:#B23A55;
+    --font-display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+    --font-body:"Nunito","Segoe UI",system-ui,-apple-system,sans-serif;
+    --radius:20px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0}
+  [hidden]{display:none!important}
+  body{
+    background:var(--bg); color:var(--ink); font-family:var(--font-body); font-size:16px; line-height:1.55;
+    padding-left:max(16px,env(safe-area-inset-left,0px)); padding-right:max(16px,env(safe-area-inset-right,0px));
+    padding-block:18px 120px;
+  }
+  button,input,select,textarea{font-family:inherit}
+  h1:focus{outline:none}
+  :focus-visible{outline:3px solid var(--pink-ink); outline-offset:2px}
+  .app{max-width:760px;margin:0 auto}
+  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .muted{color:var(--ink-soft)}
+  .small{font-size:.88rem}
+
+  .topbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 16px;margin-bottom:12px}
+  .brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:700;font-size:1.25rem;letter-spacing:-.01em}
+  .brand .p{fill:none;stroke:var(--pink-ink);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+  .brand .d0{fill:var(--bg);stroke:var(--pink-ink);stroke-width:2}
+  .brand .d1{fill:var(--pink)}
+  .brand .d2{fill:var(--sky-dark)}
+  .status{font-size:.78rem;font-weight:600;color:var(--ink-soft)}
+  .hdr-actions{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+  .pill{font-weight:700;font-size:.85rem;padding:8px 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;min-height:38px;position:relative}
+  .dotnew{position:absolute;top:-8px;right:-4px;min-width:20px;height:20px;border-radius:99px;background:var(--pink-ink);color:#fff;font-size:.72rem;display:grid;place-items:center;padding:0 5px}
+
+  .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);
+    padding-top:6px;padding-bottom:calc(6px + env(safe-area-inset-bottom,0px));
+    padding-left:max(8px,env(safe-area-inset-left,0px));padding-right:max(8px,env(safe-area-inset-right,0px))}
+  .tabbar-in{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}
+  .tab{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;color:var(--ink-soft);font-weight:700;font-size:.72rem;padding:6px 2px;border-radius:14px;cursor:pointer;min-height:52px}
+  .tab svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .tab[aria-current="page"]{background:var(--pink-soft);color:var(--pink-ink)}
+
+  .toast{position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom,0px));transform:translate(-50%,8px);background:var(--ink);color:var(--surface);
+    padding:10px 18px;border-radius:999px;font-weight:700;font-size:.92rem;max-width:calc(100vw - 32px);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:30;text-align:center}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+
+  .wiz-top{display:flex;justify-content:flex-end;margin-bottom:4px}
+  .progress{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-bottom:18px}
+  .seg{display:flex;flex-direction:column;gap:6px;min-width:0}
+  .seg-bar{height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+  .seg-bar i{display:block;height:100%;background:var(--pink);border-radius:99px;transition:width .3s}
+  .seg-name{font-size:11.5px;line-height:1.25;color:var(--ink-soft);text-wrap:balance;font-weight:600}
+  .seg.current .seg-name{color:var(--ink);font-weight:800}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:26px}
+  .card+.card{margin-top:14px}
+  @media (max-width:520px){.card{padding:20px 16px}}
+  .kicker{font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--pink-ink);margin:0 0 8px}
+  .h-title,.q-title{font-family:var(--font-display);font-weight:600;font-size:clamp(1.5rem,1.1rem + 1.8vw,2.1rem);line-height:1.18;letter-spacing:-.015em;margin:0 0 10px;text-wrap:balance}
+  .h2{font-family:var(--font-display);font-weight:600;font-size:1.25rem;letter-spacing:-.01em;margin:0 0 10px;line-height:1.2}
+  .help{color:var(--ink-soft);margin:0 0 20px;max-width:62ch}
+  .examples{background:var(--sun-soft);border-radius:14px;padding:14px 16px;margin:-4px 0 22px}
+  .ex-title{font-size:.75rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--sun-ink);margin:0 0 6px}
+  .examples ul{margin:0;padding-left:18px;display:grid;gap:4px;font-size:.92rem;color:var(--sun-ink)}
+  .gets{list-style:none;padding:0;margin:0 0 22px;display:grid;gap:8px}
+  .gets li{position:relative;padding-left:24px}
+  .gets li::before{content:"";position:absolute;left:0;top:.55em;width:12px;height:12px;border-radius:50%;background:var(--pink)}
+  .defs{margin:0 0 18px;display:grid;gap:10px}
+  .defs div{background:var(--sky-soft);border-radius:14px;padding:12px 14px}
+  .defs dt{font-weight:800;color:var(--sky-ink)}
+  .defs dd{margin:2px 0 0;color:var(--ink)}
+  .how-list{list-style:none;margin:0 0 18px;padding:0;display:grid;gap:10px}
+  .how-list li{display:grid;grid-template-columns:96px minmax(0,1fr);gap:10px;align-items:start}
+  .how-list b{background:var(--pink-soft);color:var(--pink-ink);border-radius:999px;padding:3px 10px;text-align:center;font-size:.85rem}
+  @media (max-width:420px){.how-list li{grid-template-columns:minmax(0,1fr)}.how-list b{justify-self:start}}
+  .stepdots{display:flex;gap:6px;margin-bottom:16px}
+  .stepdots i{width:28px;height:8px;border-radius:99px;background:var(--surface-2)}
+  .stepdots i.on{background:var(--pink)}
+
+  .field{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
+  .lbl{font-weight:700;font-size:.95rem}
+  .lbl-sub{font-weight:500;color:var(--ink-soft)}
+  input[type=text],input[type=date],input[type=number],textarea,select{
+    font-size:16px;width:100%;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);
+    border-radius:14px;padding:12px 14px;min-width:0
+  }
+  textarea{min-height:120px;resize:vertical;line-height:1.55}
+  input:focus,textarea:focus,select:focus{outline:3px solid var(--pink);outline-offset:0;border-color:var(--pink-ink)}
+  ::placeholder{color:var(--ink-soft);opacity:.7}
+  input[type=range]{width:100%;accent-color:#E98AA4;height:32px}
+  .inline{display:flex;align-items:center;gap:10px}
+  .inline input[type=number]{max-width:110px}
+  .suffix{color:var(--ink-soft)}
+  .check-row{display:flex;align-items:flex-start;gap:10px;font-weight:600;cursor:pointer}
+  .check-row input{width:22px;height:22px;margin:2px 0 0;accent-color:#E98AA4;flex:none}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-size:.92rem;font-weight:700;padding:9px 15px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;min-width:48px;min-height:42px}
+  .chip[aria-pressed="true"]{background:var(--pink);border-color:var(--pink-ink);color:var(--ink)}
+  .chips.folga .chip[aria-pressed="true"]{background:var(--sky);border-color:var(--sky-ink)}
+
+  .info{background:var(--sky-soft);border-radius:14px;padding:16px;margin-top:18px}
+  .info p{margin:0 0 10px}
+  .info p:last-child{margin-bottom:0}
+  .note{background:var(--sun-soft);color:var(--sun-ink);border-radius:14px;padding:12px 14px;font-size:.92rem;margin-top:12px;font-weight:600}
+  .remind{background:var(--sun-soft);color:var(--sun-ink);border-radius:var(--radius);padding:14px 16px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;margin-top:14px;font-weight:600}
+  .minibar{display:flex;height:14px;border-radius:99px;overflow:hidden;margin:12px 0 10px;background:var(--surface-2)}
+  .minibar .w{background:var(--pink)}
+  .minibar .f{background:var(--sky-dark)}
+  .mini-legend{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-wrap:wrap;gap:4px 18px;font-size:.88rem}
+  .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
+  .dot.w{background:var(--pink)}
+  .dot.f{background:var(--sky-dark)}
+
+  .actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:24px}
+  .spacer{flex:1}
+  .btn{font-weight:800;font-size:.98rem;padding:12px 22px;border-radius:999px;border:1.5px solid transparent;cursor:pointer;min-height:46px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+  .btn-sm{padding:8px 16px;min-height:40px;font-size:.9rem}
+  .btn-primary{background:var(--pink);color:var(--ink)}
+  .btn-primary:hover{filter:brightness(.96)}
+  .btn-ghost{background:var(--surface);color:var(--ink);border-color:var(--line)}
+  .btn-text{background:none;border:none;color:var(--ink-soft);text-decoration:underline;text-underline-offset:3px;padding:10px 6px;cursor:pointer;font-weight:700}
+  .btn-danger{background:var(--surface);color:var(--danger);border-color:var(--danger)}
+  .edit{background:none;border:none;color:var(--pink-ink);text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:4px 0;font-size:inherit;font-weight:700}
+
+  .banner{background:var(--pink-soft);border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;font-weight:600}
+  .banner.demo{background:var(--sky-soft)}
+
+  .plan-sub{color:var(--ink-soft);margin:0 0 20px;max-width:60ch}
+  .hero{background:var(--hero);color:var(--ink);border-radius:var(--radius);padding:26px;display:grid;gap:20px}
+  @media (max-width:520px){.hero{padding:20px 16px}}
+  .hero .kicker{color:var(--pink-ink)}
+  .hero h2{font-family:var(--font-display);font-weight:600;font-size:clamp(1.4rem,1.1rem + 1.4vw,1.9rem);line-height:1.2;letter-spacing:-.01em;margin:0;overflow-wrap:anywhere}
+  .hero-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+  @media (max-width:640px){.hero-cols{grid-template-columns:minmax(0,1fr)}}
+  .quote{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+  .hero-empty{color:var(--ink-soft)}
+  .hero-foot{margin:0}
+
+  .section{margin-top:28px}
+  .sec-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 16px;margin-bottom:10px}
+  .sec-head h2{font-family:var(--font-display);font-weight:600;font-size:1.25rem;letter-spacing:-.01em;margin:0}
+
+  .tlbar{display:flex;height:18px;border-radius:99px;overflow:hidden;background:var(--surface-2);margin-bottom:18px}
+  .tlbar .w{background:var(--pink)}
+  .tlbar .f{background:var(--sky-dark)}
+  .tllegend{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+  .tllegend li{display:grid;grid-template-columns:14px minmax(0,1fr);gap:8px;align-items:start}
+  .tllegend .dot{margin:6px 0 0}
+  .where{margin:0 0 14px}
+
+  .marco{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px;margin-top:14px}
+  @media (max-width:520px){.marco{padding:18px 16px}}
+  .marco-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:6px 16px;margin-bottom:14px}
+  .marco h3{font-family:var(--font-display);font-weight:600;font-size:1.3rem;line-height:1.2;margin:0;overflow-wrap:anywhere}
+  .marco .kicker{margin-bottom:4px}
+  .smart{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+  .smart li{min-width:0;display:flex;flex-direction:column;gap:3px}
+  .t,.kv .k{font-size:.8rem;font-weight:800;color:var(--ink-soft);letter-spacing:.02em}
+  .a{white-space:pre-wrap;overflow-wrap:anywhere}
+  .a.sub{color:var(--ink-soft);font-size:.92rem}
+  .empty{color:var(--ink-soft);font-style:italic}
+  .dates{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+  .dbox{display:flex;flex-direction:column;background:var(--bg);border-radius:14px;padding:10px 12px}
+  .dbox.folga{background:var(--sky-soft)}
+  .dbox .k{font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+  .dbox .v{font-weight:700}
+  .kvs{display:grid;gap:14px}
+  .kv{display:flex;flex-direction:column;gap:2px;min-width:0}
+
+  .bar{height:14px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+  .bar i{display:block;height:100%;background:var(--pink);border-radius:99px;transition:width .3s}
+  .bar.sky i{background:var(--sky-dark)}
+  .mrow{margin-bottom:14px}
+  .mrow:last-child{margin-bottom:0}
+  .mrow-h{display:flex;justify-content:space-between;gap:12px;margin-bottom:6px;font-weight:700}
+  .mrow-h span{min-width:0;overflow-wrap:anywhere}
+
+  .tag{display:inline-block;font-size:.72rem;font-weight:800;padding:2px 9px;border-radius:999px;background:var(--surface-2);color:var(--ink-soft);margin-left:6px;vertical-align:middle}
+  .tag.m1{background:var(--pink-soft);color:var(--pink-ink)}
+  .tag.m2{background:var(--sky-soft);color:var(--sky-ink)}
+  .tag.free{background:var(--sky-soft);color:var(--sky-ink)}
+  .tag.now{background:var(--sun);color:var(--sun-ink)}
+  .tag.shared{background:var(--sky-soft);color:var(--sky-ink)}
+
+  .tasks{list-style:none;margin:0 0 10px;padding:0;display:grid;gap:4px}
+  .task{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;padding:4px 0}
+  .task-t{overflow-wrap:anywhere}
+  .task.done .task-t{text-decoration:line-through;color:var(--ink-soft)}
+  .check{width:30px;height:30px;border-radius:50%;border:2.5px solid var(--pink);background:var(--surface);display:grid;place-items:center;cursor:pointer;padding:0;color:transparent}
+  .check svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}
+  .check[aria-checked="true"]{background:var(--pink);color:var(--ink)}
+  .x{background:none;border:none;color:var(--ink-soft);font-size:1.3rem;line-height:1;padding:6px 10px;cursor:pointer;border-radius:10px}
+  .addrow{display:flex;flex-wrap:wrap;gap:8px}
+  .addrow input{flex:1 1 200px;width:auto}
+  .addrow select{flex:0 1 auto;width:auto;max-width:100%}
+  .empty-tasks{margin:0 0 10px;color:var(--ink-soft)}
+
+  .day{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+  .day+.day{margin-top:10px}
+  .day.today{border-color:var(--pink);box-shadow:0 0 0 3px var(--pink-soft)}
+  .day-h{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;margin-bottom:8px;font-weight:800}
+  .weeknav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+  .weeknav .range{font-family:var(--font-display);font-weight:600;font-size:1.15rem;text-align:center;flex:1}
+  .navarrow{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font-size:1.3rem;cursor:pointer}
+
+  .dots{display:grid;grid-template-columns:repeat(14,minmax(0,1fr));gap:4px;margin:10px 0 8px}
+  .dotcol{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:.68rem;color:var(--ink-soft);font-weight:700}
+  .dd{width:100%;max-width:22px;aspect-ratio:1;border-radius:50%;background:var(--surface-2)}
+  .dd.on{background:var(--pink)}
+  .dd.today{outline:2px solid var(--ink);outline-offset:1px}
+
+  .entry{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-top:10px}
+  .entry-h{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 10px;margin-bottom:8px}
+  .entry-h strong{font-weight:800}
+  .entry p{margin:0 0 8px;white-space:pre-wrap;overflow-wrap:anywhere}
+  .entry .q{font-size:.8rem;font-weight:800;color:var(--ink-soft);display:block}
+  .entry-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+
+  .hard{display:grid;gap:12px}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+  @media (max-width:520px){.panel{padding:18px 16px}}
+  .panel.big{background:var(--hero);border-color:transparent}
+  .panel.step{background:var(--sun-soft);border-color:transparent}
+  .panel p{margin:0}
+  .panel .kicker{margin-bottom:8px}
+  .xl{font-size:1.22rem;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere}
+  .steplist{margin:8px 0 0;padding-left:20px;display:grid;gap:4px}
+
+  .client{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;margin-top:12px}
+  .client-h{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 12px;margin-bottom:10px}
+  .client h3{font-family:var(--font-display);font-weight:600;font-size:1.25rem;margin:0}
+  .client details{margin-top:10px}
+  .client summary{cursor:pointer;font-weight:700;color:var(--pink-ink)}
+
+  .reset{margin-top:8px}
+  .reset p{margin:0 0 10px}
+  #copytext{margin-top:12px;min-height:200px}
+  .foot{margin:22px 0 0;font-size:.85rem;color:var(--ink-soft)}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head><body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><path class="p" d="M4 22 L14 13 L24 6"/><circle class="d0" cx="4" cy="22" r="2.5"/><circle class="d1" cx="14" cy="13" r="3.2"/><circle class="d2" cx="24" cy="6" r="3.2"/></svg>
+      <span>Meu Plano 2027</span>
+    </div>
+    <span class="status" id="status" aria-live="polite"></span>
+  </header>
+  <div class="hdr-actions">
+    <button type="button" class="pill" data-act="view" data-view="como">Como funciona</button>
+  </div>
+  <main id="main"></main>
+</div>
+<nav class="tabbar" id="tabbar" aria-label="Seções do app" hidden><div class="tabbar-in" id="tabbar-in"></div></nav>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  'use strict';
+  var KEY='meu-plano-2027:v1', SEEN_KEY='meu-plano-2027:mentora-visto';
+  var DAY_MS=86400000;
+  var DAYS=['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'];
+  var DAYS_LONG=['Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'];
+  var SECTIONS=['Sonho','Marco 1','Marco 2','Primeiro passo','Dias difíceis'];
+  var VIEWS=['intro','como','wizard','hoje','semana','diario','progresso','plano','porque','mentora'];
+  var MOODS=[['animada','Animada'],['tranquila','Tranquila'],['cansada','Cansada'],['ansiosa','Ansiosa'],['desanimada','Desanimada']];
+  var PRAISE=['Mais um passo feito.','Isso conta.','Um passo de cada vez.','Boa, continue no seu ritmo.','Você fez o que combinou.'];
+  var ICONS={
+    hoje:'<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/>',
+    semana:'<rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+    diario:'<path d="M6 3.5h11a2 2 0 0 1 2 2v14a1 1 0 0 1-1 1H7a2 2 0 0 1-2-2V4.5a1 1 0 0 1 1-1z"/><path d="M9 8h7M9 12h7"/>',
+    progresso:'<path d="M4 19V5"/><path d="M4 19h16"/><path d="M8 15l4-5 3 3 4-6"/>',
+    plano:'<path d="M6 21V4"/><path d="M6 5h11l-2.5 4L17 13H6"/>'
+  };
+  var TABS=[['hoje','Hoje'],['semana','Semana'],['diario','Diário'],['progresso','Progresso'],['plano','Meu plano']];
+  var CHECK_SVG='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+
+  var main=document.getElementById('main');
+  var statusEl=document.getElementById('status');
+  var tabbar=document.getElementById('tabbar');
+  var tabbarIn=document.getElementById('tabbar-in');
+
+  function blankMarco(){return {nome:'',s:'',m:'',dias:[],horas:'',obs:'',r:'',prazo:'',folga:30,pct:0};}
+  function blank(){
+    return {nome:'',concurso:'',cena:'',porque:'',
+      marcos:[blankMarco(),blankMarco()],
+      passo:{oque:'',quando:'',como:''},
+      hard:{acontece:'',freio:'',minimo:'',atraso:'',frase:'',apoio:'',passos:[]},
+      weeks:{},tasks:{},diary:[],checkins:[],minDone:{},mood:{},
+      shareOn:true,seen:false,lastShareAt:0,
+      view:'intro',step:0,updatedAt:0};
+  }
+
+  var state=blank();
+  var storageOk=true;
+  var cloud={doc:null,sharedDoc:null,ok:false,shared:'',owner:false,id:null,unsub:null};
+  var demoReal=null;
+  var justFinished=false;
+  var saveTimer=null, cloudTimer=null, pushing=false, pendingPush=false, toastTimer=null;
+  var introIdx=0, weekRef=null, draft=null, confirmDel=null, ci=null, ciDone=false;
+  var sharedList=[], seenBefore=0;
+
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+  function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+
+  /* ---------- armazenamento ---------- */
+  function merge(base,o){
+    if(!o||typeof o!=='object') return base;
+    Object.keys(base).forEach(function(k){
+      var b=base[k], v=o[k];
+      if(v===undefined||v===null) return;
+      if(Array.isArray(b)){
+        if(!Array.isArray(v)) return;
+        if(k==='dias') base[k]=v.filter(function(n){return Number.isInteger(n)&&n>=0&&n<7;});
+        else if(b.length&&typeof b[0]==='object') base[k]=b.map(function(item,i){return merge(item,v[i]);});
+        else base[k]=v;
+      } else if(b&&typeof b==='object'){
+        if(Object.keys(b).length===0) base[k]=(typeof v==='object')?v:b;
+        else base[k]=merge(b,v);
+      } else if(typeof b===typeof v){ base[k]=v; }
+    });
+    return base;
+  }
+  function load(){
+    try{
+      var raw=localStorage.getItem(KEY);
+      if(raw) state=merge(blank(),JSON.parse(raw));
+    }catch(e){ storageOk=false; }
+    try{ seenBefore=parseInt(localStorage.getItem(SEEN_KEY),10)||0; }catch(e){}
+  }
+  function persistLocal(){
+    if(demoReal) return;
+    try{ localStorage.setItem(KEY,JSON.stringify(state)); storageOk=true; }catch(e){ storageOk=false; }
+  }
+  function save(){
+    if(demoReal) return;
+    state.updatedAt=Date.now();
+    persistLocal();
+    clearTimeout(cloudTimer);
+    cloudTimer=setTimeout(pushCloud,1200);
+    updateStatus();
+  }
+  function saveSoon(){ clearTimeout(saveTimer); saveTimer=setTimeout(save,250); }
+
+  function hasData(s){
+    return !!(s.nome||s.concurso||s.cena||s.porque||s.marcos.some(function(m){return m.nome||m.s||m.m||m.r||m.prazo;})||s.passo.oque||s.hard.frase||s.hard.minimo);
+  }
+  function sharedBody(){
+    var ws=weekStats(isoOf(mondayOf(today0())));
+    return {
+      nome:state.nome||'', objetivo:state.concurso||'',
+      marcos:state.marcos.map(function(mk,i){
+        var c=calcMarco(i);
+        return {nome:mk.nome||'',pct:mk.pct||0,prazo:mk.prazo||'',internal:(c&&c.valid)?isoOf(c.internal):''};
+      }),
+      semana:{feitas:ws.done,total:ws.total}, dias14:activeCount(14),
+      checkins:state.checkins.slice(-12),
+      diario:state.diary.filter(function(e){return e.share;}).slice(-12).map(function(e){return {date:e.date,humor:e.humor||'',a:e.a||'',b:e.b||'',c:e.c||''};}),
+      activityAt:state.lastShareAt||0, updatedAt:Date.now()
+    };
+  }
+  function pushCloud(){
+    if(demoReal) return Promise.resolve();
+    if(!cloud.doc&&!cloud.sharedDoc) return Promise.resolve();
+    if(pushing){ pendingPush=true; return Promise.resolve(); }
+    pushing=true;
+    var p=Promise.resolve();
+    if(cloud.doc){
+      var body={state:clone(state),updatedAt:state.updatedAt};
+      p=p.then(function(){ return cloud.doc.set(body); }).then(function(){ cloud.ok=true; }).catch(function(e){
+        cloud.ok=false;
+        if(e&&e.code==='invalid_argument') cloud.doc=null;
+      });
+    }
+    p=p.then(function(){
+      if(!cloud.sharedDoc) return;
+      if(state.shareOn){
+        if(!hasData(state)) return;
+        return cloud.sharedDoc.set(sharedBody()).then(function(){ cloud.shared='ok'; });
+      }
+      return cloud.sharedDoc.delete().then(function(){ cloud.shared='off'; });
+    }).catch(function(e){
+      if(e&&e.code==='invalid_argument'){ cloud.shared='noaccess'; cloud.sharedDoc=null; }
+      else cloud.shared='error';
+    }).then(function(){
+      pushing=false;
+      if(pendingPush){ pendingPush=false; pushCloud(); }
+      updateStatus();
+    });
+    return p;
+  }
+  function watchShared(db){
+    if(cloud.unsub) return;
+    try{
+      cloud.unsub=db.collection('shared').onSnapshot(function(snap){
+        sharedList=snap.docs.map(function(d){ return {id:d.id,data:d.data()||{}}; });
+        sharedList.sort(function(a,b){ return (b.data.activityAt||0)-(a.data.activityAt||0); });
+        updateChrome();
+        if(state.view==='mentora') render({keep:true});
+      },function(){ sharedList=[]; });
+    }catch(e){}
+  }
+  function initCloud(){
+    try{
+      if(!window.claude||typeof window.claude.use!=='function') return;
+      Promise.all([window.claude.use('db'),window.claude.use('user')]).then(function(r){
+        var db=r[0], user=r[1];
+        if(!db||!user) return;
+        return Promise.all([user.id(),user.isOwner()]).then(function(x){
+          var id=x[0];
+          cloud.owner=!!x[1];
+          updateChrome();
+          if(cloud.owner) watchShared(db);
+          if(!id) return;
+          cloud.id=id;
+          var doc=db.doc('data/users/'+id+'/plano');
+          cloud.sharedDoc=db.doc('shared/'+id);
+          return doc.get().then(function(snap){
+            var d=snap.exists?snap.data():null;
+            var remote=d&&d.state, rAt=(d&&typeof d.updatedAt==='number')?d.updatedAt:0;
+            cloud.doc=doc;
+            if(remote&&rAt>state.updatedAt&&!demoReal){
+              state=merge(blank(),remote);
+              state.updatedAt=rAt;
+              fixState();
+              persistLocal();
+              cloud.ok=true;
+              render();
+            } else if(hasData(state)&&state.updatedAt>rAt){
+              pushCloud();
+            } else if(snap.exists){
+              cloud.ok=true;
+            }
+            updateStatus();
+          });
+        });
+      }).catch(function(){ cloud.doc=null; });
+    }catch(e){ cloud.doc=null; }
+  }
+
+  function getP(path){ return path.split('.').reduce(function(o,k){return o==null?o:o[k];},state); }
+  function setP(path,val){
+    var ks=path.split('.'), o=state;
+    for(var i=0;i<ks.length-1;i++) o=o[ks[i]];
+    o[ks[ks.length-1]]=val;
+  }
+  function esc(s){
+    return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});
+  }
+  function toast(msg){
+    var el=document.getElementById('toast'); if(!el) return;
+    el.textContent=msg; el.className='toast show';
+    clearTimeout(toastTimer);
+    toastTimer=setTimeout(function(){ el.className='toast'; },2600);
+  }
+  function praise(){ return PRAISE[Math.floor(Math.random()*PRAISE.length)]; }
+
+  /* ---------- datas e números ---------- */
+  function today0(){ var d=new Date(); return new Date(d.getFullYear(),d.getMonth(),d.getDate()); }
+  function parseISO(s){
+    if(typeof s!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(s)) return null;
+    var p=s.split('-').map(Number), d=new Date(p[0],p[1]-1,p[2]);
+    return isNaN(d.getTime())?null:d;
+  }
+  function addDays(d,n){ return new Date(d.getFullYear(),d.getMonth(),d.getDate()+n); }
+  function diffDays(a,b){ return Math.round((b.getTime()-a.getTime())/DAY_MS); }
+  function fmtLong(d){ return d.toLocaleDateString('pt-BR',{day:'numeric',month:'long',year:'numeric'}); }
+  function fmtDM(d){ return d.toLocaleDateString('pt-BR',{day:'numeric',month:'long'}); }
+  function isoOf(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+  function mondayOf(d){ var dow=(d.getDay()+6)%7; return new Date(d.getFullYear(),d.getMonth(),d.getDate()-dow); }
+  function fmtRange(a,b){
+    var ma=a.toLocaleDateString('pt-BR',{month:'long'}), mb=b.toLocaleDateString('pt-BR',{month:'long'});
+    return a.getMonth()===b.getMonth()?a.getDate()+' a '+b.getDate()+' de '+ma:a.getDate()+' de '+ma+' a '+b.getDate()+' de '+mb;
+  }
+  function ago(ts){
+    var d=Math.floor((Date.now()-ts)/DAY_MS);
+    if(d<=0) return 'hoje';
+    if(d===1) return 'ontem';
+    return 'há '+d+' dias';
+  }
+  function pl(n){ return n+' '+(n===1?'dia':'dias'); }
+  function livres(n){ return n===0?'nenhum dia livre':(n===1?'1 dia livre':n+' dias livres'); }
+  function num(v){ var n=parseFloat(String(v==null?'':v).replace(',','.')); return (isFinite(n)&&n>0)?n:0; }
+  function fmtH(x){ return (Math.round(x*10)/10).toString().replace('.',',')+' h'; }
+  function sortedDias(mk){ return (mk.dias||[]).slice().sort(function(a,b){return a-b;}); }
+  function moodLabel(k){ for(var i=0;i<MOODS.length;i++) if(MOODS[i][0]===k) return MOODS[i][1]; return ''; }
+
+  function calcMarco(i){
+    var mk=state.marcos[i], prazo=parseISO(mk.prazo);
+    if(!prazo) return null;
+    var start=today0();
+    if(i===1){
+      var p1=parseISO(state.marcos[0].prazo);
+      if(p1&&p1.getTime()>start.getTime()&&p1.getTime()<prazo.getTime()) start=p1;
+    }
+    var total=diffDays(start,prazo);
+    if(total<=0) return {valid:false,prazo:prazo,start:start,total:total};
+    var pct=[20,30,40].indexOf(mk.folga)>=0?mk.folga:30;
+    var workDays=Math.floor(total*(100-pct)/100);
+    return {valid:true,prazo:prazo,start:start,total:total,pct:pct,workDays:workDays,folgaDays:total-workDays,internal:addDays(start,workDays)};
+  }
+  function whereInfo(){
+    var t=today0();
+    for(var i=0;i<2;i++){
+      var c=calcMarco(i);
+      if(c&&c.valid) return {i:i,c:c,dInt:diffDays(t,c.internal),dPraz:diffDays(t,c.prazo)};
+    }
+    return null;
+  }
+  function whereSentence(w){
+    if(w.dInt>0) return 'Faltam <strong>'+pl(w.dInt)+'</strong> para a meta interna do Marco '+(w.i+1)+' e '+pl(w.dPraz)+' para o prazo final.';
+    return 'Você está dentro da folga do Marco '+(w.i+1)+'. Faltam '+pl(w.dPraz)+' para o prazo final.';
+  }
+  function getSegments(){
+    var segs=[], c1=calcMarco(0), c2=calcMarco(1);
+    var ok1=!!(c1&&c1.valid), ok2=!!(c2&&c2.valid);
+    if(ok1){
+      segs.push({k:'w',label:'Marco 1, trabalho',from:c1.start,to:c1.internal});
+      segs.push({k:'f',label:'Marco 1, folga',from:c1.internal,to:c1.prazo});
+    }
+    if(ok2&&(!ok1||c2.start.getTime()===c1.prazo.getTime())){
+      segs.push({k:'w',label:'Marco 2, trabalho',from:c2.start,to:c2.internal});
+      segs.push({k:'f',label:'Marco 2, folga',from:c2.internal,to:c2.prazo});
+    }
+    return segs;
+  }
+
+  /* ---------- semana, passos e constância ---------- */
+  function weekStats(monIso){
+    var d0=parseISO(monIso)||mondayOf(today0()), total=0, done=0;
+    for(var i=0;i<7;i++){
+      var ts=state.tasks[isoOf(addDays(d0,i))]||[];
+      total+=ts.length;
+      done+=ts.filter(function(x){return x.d;}).length;
+    }
+    return {total:total,done:done};
+  }
+  function isActiveDay(iso){
+    var ts=state.tasks[iso];
+    if(ts&&ts.some(function(x){return x.d;})) return true;
+    return !!state.minDone[iso];
+  }
+  function activeCount(n){
+    var t=today0(), c=0;
+    for(var i=0;i<n;i++){ if(isActiveDay(isoOf(addDays(t,-i)))) c++; }
+    return c;
+  }
+  function freeDow(dow){
+    var u=[];
+    state.marcos.forEach(function(mk){ (mk.dias||[]).forEach(function(d){ if(u.indexOf(d)<0) u.push(d); }); });
+    return u.length>0&&u.indexOf(dow)<0;
+  }
+  function peekWeek(iso){ return state.weeks[iso]||{oque:'',quando:'',como:''}; }
+  function weekData(iso){ if(!state.weeks[iso]) state.weeks[iso]={oque:'',quando:'',como:''}; return state.weeks[iso]; }
+
+  /* ---------- explicações ---------- */
+  var HOW=[
+    {title:'Oi! Este é o seu espaço para 2027',
+     body:['Aqui você transforma um sonho grande em passos pequenos, com data e com espaço para respirar.','Você não precisa acertar nada de primeira. Tudo pode ser mudado depois, quantas vezes quiser.']},
+    {title:'Primeiro, você monta o seu plano',
+     body:['Você vai responder algumas perguntas, uma de cada vez. Elas ajudam a escrever o que você quer, por que quer e o que precisa ficar pronto até quando.','No fim, o seu plano aparece pronto, com duas etapas importantes que chamamos de marcos.'],
+     defs:[['O que é um marco?','É um ponto de chegada no meio do caminho. Por exemplo: terminar a primeira parte do conteúdo.'],['O que é folga?','É um tempo extra que a gente reserva de propósito. Se tudo der certo, você chega antes. Se vier um dia ruim, você não fica para trás.']]},
+    {title:'Depois, você usa no dia a dia',
+     body:['Na barra de baixo ficam as partes que você vai usar sempre:'],
+     list:[['Hoje','os passos pequenos do dia e como você está se sentindo.'],['Semana','organize os dias, escolha o seu primeiro passo e deixe passos prontos para os dias difíceis.'],['Diário','escreva como foi o seu dia, do jeito que quiser.'],['Progresso','conte o quanto você avançou em cada marco.'],['Meu plano','tudo o que você escreveu, num lugar só.']]},
+    {title:'Quem vê o quê',
+     body:['Sua mentora acompanha a sua evolução pelo que você enviar a ela. Quando quiser, use o botão Enviar resumo para a minha mentora: ele monta uma mensagem curta e você manda pelo WhatsApp.','Nada é enviado sozinho. O diário é só seu, e só entra no resumo a anotação que você marcar.']},
+    {title:'E nos dias difíceis?',
+     body:['Todo mundo tem dia ruim. Por isso existe o botão Relembrar meu porquê, na aba Hoje. Ele mostra o seu sonho, o motivo que você escreveu e o menor passo que ainda conta.','Atrasar não é fracassar. Por isso o plano já nasce com folga.']}
+  ];
+  function howBodyHTML(s){
+    var h=s.body.map(function(p){return '<p class="help">'+esc(p)+'</p>';}).join('');
+    if(s.defs) h+='<dl class="defs">'+s.defs.map(function(d){return '<div><dt>'+esc(d[0])+'</dt><dd>'+esc(d[1])+'</dd></div>';}).join('')+'</dl>';
+    if(s.list) h+='<ul class="how-list">'+s.list.map(function(d){return '<li><b>'+esc(d[0])+'</b><span>'+esc(d[1])+'</span></li>';}).join('')+'</ul>';
+    return h;
+  }
+
+  /* ---------- roteiro de perguntas do plano ---------- */
+  function marcoSteps(i){
+    var n=i+1, p='marcos.'+i+'.', sec=1+i;
+    var list=[
+      {id:'m'+i+'s',pos:1,
+       title:'Marco '+n+': o que exatamente você quer ter pronto?',
+       help:i===0?'Um marco é um ponto de chegada no caminho até o seu objetivo. Vamos definir o primeiro com algumas perguntas curtas, com data e com folga.':'Este é o segundo ponto de chegada. As perguntas são as mesmas do primeiro marco.',
+       examples:['Concurso: ter lido e resumido as seis matérias principais do edital.','Negócio: ter o site no ar, com a página de serviços e o formulário de contato funcionando.','Saúde: ter a rotina de treino e a de refeições da semana montadas.'],
+       fields:[
+         {path:p+'nome',type:'text',label:'Dê um nome ao marco',ph:i===0?'Ex.: Edital estudado uma vez':'Ex.: Primeira fase da prova'},
+         {path:p+'s',type:'area',label:'O que vai estar pronto?',ph:'Descreva com detalhes o que vai estar feito.'}
+       ]},
+      {id:'m'+i+'m',pos:2,
+       title:'Como você vai saber que chegou lá?',
+       help:'Escolha algo que dá para conferir: um número, uma porcentagem, uma nota ou uma entrega concreta. Assim você sabe quando terminou, sem depender de sensação.',
+       examples:['6 simulados feitos, com média acima de 70%.','10 clientes novos atendidos no mês.','Correr 10 km sem parar, em menos de 70 minutos.'],
+       fields:[{path:p+'m',type:'area',label:'Minha medida de sucesso',hide:true,ph:'Ex.: 100% do edital marcado como visto e 40 questões resolvidas por matéria.'}]},
+      {id:'m'+i+'a',pos:3,
+       title:'Quanto tempo você consegue dedicar, de verdade?',
+       help:'Pense na sua semana real, com trabalho, casa e cansaço. Comece com menos do que você acha que consegue. Aumentar depois é mais fácil do que recuperar um ritmo que não dá para manter.',
+       examples:['Segunda, quarta e sexta, 2 horas por dia. No sábado, só uma revisão rápida.','De terça a sábado, 1 hora por dia, antes de começar o trabalho.'],
+       fields:[
+         {path:p+'dias',type:'days',label:'Em quais dias da semana você se dedica a isso?'},
+         {path:p+'horas',type:'hours',label:'Quantas horas por dia?'},
+         {path:p+'obs',type:'area',rows:3,optional:true,label:'O que pode atrapalhar, e como você lida com isso?',ph:'Ex.: Plantão aos sábados. Nesses dias faço só uma revisão rápida.'}
+       ],extra:'ritmo'},
+      {id:'m'+i+'r',pos:4,
+       title:'Por que este marco importa para o seu objetivo?',
+       help:'Escreva a ligação entre este marco e o que você quer conquistar. Se for difícil responder, vale ajustar o marco, e ajustar é permitido.',
+       examples:['Sem a base do edital, os simulados não mostram onde estão as minhas lacunas.','Com o site no ar, eu consigo mostrar o meu trabalho e receber os primeiros contatos.','Criar o hábito de treinar agora me deixa pronta para aumentar a distância depois.'],
+       fields:[{path:p+'r',type:'area',label:'Por que este marco importa',hide:true,ph:'Escreva com as suas palavras.'}]},
+      {id:'m'+i+'t',pos:5,
+       title:'Para quando?',
+       help:'Escolha a data final do marco e depois quanto do tempo você quer reservar como folga. A folga é um espaço combinado para imprevistos, dias ruins e descanso.',
+       examples:['Concurso: a data da prova ou do fim das inscrições.','Negócio: a data de lançamento.','Corrida: a data da prova que você escolheu.'],
+       fields:[
+         {path:p+'prazo',type:'date',label:'Data final do marco'},
+         {path:p+'folga',type:'folga',label:'Quanto do tempo fica como folga?'}
+       ],extra:'folga'}
+    ];
+    return list.map(function(s){ s.sec=sec; s.kind='q'; s.marco=i; return s; });
+  }
+
+  var STEPS=[
+    {id:'welcome',kind:'welcome',sec:0},
+    {id:'concurso',kind:'q',sec:0,kicker:'Meu sonho',title:'Qual é o seu sonho para 2027? O que você quer conquistar?',
+     help:'Escreva do jeito que você contaria para uma amiga.',
+     examples:['Passar no concurso de Analista Judiciário.','Lançar o meu primeiro curso online.','Correr a minha primeira meia maratona.'],
+     fields:[{path:'concurso',type:'text',label:'O meu objetivo (um cargo, um concurso, uma meta...)',ph:'Ex.: Passar no concurso de Analista de um Tribunal'}]},
+    {id:'cena',kind:'q',sec:0,kicker:'Meu sonho',title:'Imagine que você conquistou. Como é um dia comum na sua vida nova?',
+     help:'Pense em uma cena simples: a hora em que você acorda, o que sente, quem está por perto. Detalhes pequenos ajudam a tornar real.',
+     examples:['Acordo sem aquele aperto no peito, tomo café com calma e começo o dia no trabalho que escolhi.','Abro a agenda da semana e vejo todos os horários preenchidos.'],
+     fields:[{path:'cena',type:'area',label:'Um dia comum depois de conquistar',hide:true,ph:'Escreva a cena com as suas palavras.'}]},
+    {id:'porque',kind:'q',sec:0,kicker:'Meu sonho',title:'Por que isso é importante para você?',
+     help:'Escreva o motivo verdadeiro, mesmo que pareça pequeno. É este texto que você vai reler nos dias difíceis.',
+     examples:['Quero segurança para cuidar de quem eu amo.','Quero provar para mim mesma que consigo terminar o que começo.'],
+     fields:[{path:'porque',type:'area',label:'O meu porquê',hide:true,ph:'Escreva o seu motivo.'}]},
+    {id:'pause0',kind:'pause',sec:0,title:'Primeira parte concluída',text:'O seu sonho já está salvo. Você pode continuar agora ou parar por hoje e voltar quando quiser. Nada se perde.'}
+  ].concat(marcoSteps(0),[
+    {id:'pause1',kind:'pause',sec:1,title:'Marco 1 pronto',text:'Respire um pouco. Se quiser parar, o Marco 1 já aparece no seu plano. Quando voltar, vamos fazer o Marco 2 do mesmo jeito.'}
+  ],marcoSteps(1),[
+    {id:'pause2',kind:'pause',sec:2,title:'Marco 2 pronto',text:'Os dois marcos estão definidos. Faltam só o primeiro passo e a parte para os dias difíceis, que é a que mais vai ajudar você.'},
+    {id:'passo',kind:'q',sec:3,kicker:'Primeiro passo',title:'Qual é o primeiro passo, bem pequeno, desta semana?',
+     help:'Escolha algo que leve menos de 15 minutos. O objetivo é começar sem se sobrecarregar.',
+     examples:['Separar o edital e dividir as matérias em blocos, quinta às 20h, por 15 minutos.','Escolher o nome do site e anotar três ideias, amanhã de manhã, no celular.','Deixar o tênis de corrida separado hoje à noite.'],
+     fields:[
+       {path:'passo.oque',type:'text',label:'O que eu vou fazer',ph:'Ex.: Separar o material e dividir em blocos'},
+       {path:'passo.quando',type:'text',label:'Quando (dia e horário)',ph:'Ex.: Quinta-feira, às 20h, por 15 minutos'},
+       {path:'passo.como',type:'text',label:'Como e onde',ph:'Ex.: Na mesa da sala, com um marcador e papel'}
+     ]},
+    {id:'h0',kind:'q',sec:4,kicker:'Dias difíceis',title:'O que costuma acontecer quando você desanima?',
+     help:'Descrever ajuda a reconhecer o padrão mais cedo. Não precisa julgar, só observar.',
+     examples:['Perco um dia, depois outro, e começo a achar que já perdi tudo.','Fico olhando para o tamanho da tarefa e acabo não começando.'],
+     fields:[{path:'hard.acontece',type:'area',label:'Quando o desânimo chega, eu...',hide:true,ph:'Escreva o que costuma acontecer.'}]},
+    {id:'h1',kind:'q',sec:4,kicker:'Dias difíceis',title:'Quando estiver muito empolgada, o que você combina de NÃO fazer?',
+     help:'Começar tudo de uma vez gasta a energia rápido. Escolha um limite que proteja o seu ritmo.',
+     examples:['Não começo mais de uma frente nova por semana.','Não passo do tempo combinado, mesmo com vontade de continuar.'],
+     fields:[{path:'hard.freio',type:'area',label:'Meu freio de empolgação',hide:true,ph:'Ex.: Não começo mais de uma frente nova por semana.'}]},
+    {id:'h2',kind:'q',sec:4,kicker:'Dias difíceis',title:'Qual é o menor passo que ainda conta num dia ruim?',
+     help:'Algo tão pequeno que dá para fazer até cansada.',
+     examples:['10 minutos de revisão dos meus resumos.','Abrir o arquivo e escrever uma frase.','Uma caminhada curta.'],
+     fields:[{path:'hard.minimo',type:'text',label:'Meu passo mínimo',hide:true,ph:'Ex.: 10 minutos de revisão'}]},
+    {id:'h3',kind:'q',sec:4,kicker:'Dias difíceis',title:'Se eu atrasar, eu combino comigo que...',
+     help:'Atrasar faz parte do plano, por isso existe a folga. Escreva como você quer se tratar nesse momento.',
+     examples:['Uso a folga, retomo de onde parei e não tento recuperar tudo em um dia.','Escolho a tarefa mais fácil e só depois reorganizo a semana.'],
+     fields:[{path:'hard.atraso',type:'area',label:'Meu combinado para quando eu atrasar',hide:true,ph:'Escreva o seu combinado.'}]},
+    {id:'h4',kind:'q',sec:4,kicker:'Dias difíceis',title:'Uma frase sua para reler quando o desânimo chegar',
+     help:'Pode ser curta. Escreva com a sua voz, como se falasse com você mesma.',
+     examples:['Continuar devagar também é continuar.','Eu já comecei, e isso conta.'],
+     fields:[
+       {path:'hard.frase',type:'text',label:'Minha frase',ph:'Ex.: Continuar devagar também é continuar.'},
+       {path:'hard.apoio',type:'text',optional:true,label:'Quem pode me lembrar do meu porquê?',ph:'Ex.: Minha irmã'}
+     ]}
+  ]);
+
+  function fixState(){
+    if(!Number.isInteger(state.step)||state.step<0||state.step>=STEPS.length) state.step=0;
+    var map={plan:'plano',hard:'porque'};
+    if(map[state.view]) state.view=map[state.view];
+    if(VIEWS.indexOf(state.view)<0||state.view==='como'||state.view==='mentora') state.view='hoje';
+    if(!state.seen&&hasData(state)) state.seen=true;
+    if(!state.seen) state.view='intro';
+    else if(state.view==='intro') state.view='hoje';
+  }
+
+  /* ---------- peças do plano ---------- */
+  function fieldHTML(f){
+    var id='f-'+f.path.replace(/\./g,'-');
+    var v=getP(f.path);
+    var opt=f.optional?' <span class="lbl-sub">(opcional)</span>':'';
+    var lblCls=f.hide?'lbl sr-only':'lbl';
+    var ctl='';
+    if(f.type==='text'){
+      ctl='<input type="text" id="'+id+'" data-path="'+f.path+'" value="'+esc(v)+'" placeholder="'+esc(f.ph||'')+'" autocomplete="off">';
+    } else if(f.type==='area'){
+      ctl='<textarea id="'+id+'" data-path="'+f.path+'" rows="'+(f.rows||5)+'" placeholder="'+esc(f.ph||'')+'">'+esc(v)+'</textarea>';
+    } else if(f.type==='date'){
+      ctl='<input type="date" id="'+id+'" data-path="'+f.path+'" value="'+esc(v)+'">';
+    } else if(f.type==='hours'){
+      ctl='<div class="inline"><input type="number" id="'+id+'" data-path="'+f.path+'" value="'+esc(v)+'" min="0" max="12" step="0.5" inputmode="decimal" placeholder="2"><span class="suffix">horas por dia</span></div>';
+    } else if(f.type==='days'){
+      var sel=Array.isArray(v)?v:[];
+      ctl='<div class="chips" role="group" aria-labelledby="'+id+'-l">'+DAYS.map(function(d,i){
+        return '<button type="button" class="chip" data-act="day" data-path="'+f.path+'" data-val="'+i+'" aria-pressed="'+(sel.indexOf(i)>=0)+'">'+d+'</button>';
+      }).join('')+'</div>';
+      return '<div class="field"><div class="lbl" id="'+id+'-l">'+esc(f.label)+'</div>'+ctl+'</div>';
+    } else if(f.type==='folga'){
+      var opts=[[20,'20% (justa)'],[30,'30% (equilibrada)'],[40,'40% (bem folgada)']];
+      var cur=[20,30,40].indexOf(v)>=0?v:30;
+      ctl='<div class="chips folga" role="group" aria-labelledby="'+id+'-l">'+opts.map(function(o){
+        return '<button type="button" class="chip" data-act="folga" data-path="'+f.path+'" data-val="'+o[0]+'" aria-pressed="'+(cur===o[0])+'">'+o[1]+'</button>';
+      }).join('')+'</div>';
+      return '<div class="field"><div class="lbl" id="'+id+'-l">'+esc(f.label)+'</div>'+ctl+'</div>';
+    }
+    return '<div class="field"><label class="'+lblCls+'" for="'+id+'">'+esc(f.label)+opt+'</label>'+ctl+'</div>';
+  }
+
+  function extraHTML(st){
+    var mk=state.marcos[st.marco];
+    if(st.extra==='ritmo'){
+      var dias=sortedDias(mk), h=num(mk.horas);
+      if(!dias.length||!h) return '<div class="info"><p>Escolha os dias e as horas para ver o seu ritmo da semana.</p></div>';
+      var out='<div class="info"><p><strong>Seu ritmo:</strong> '+dias.map(function(d){return DAYS[d];}).join(', ')+', '+fmtH(h)+' por dia. São <strong>'+fmtH(dias.length*h)+' por semana</strong> e '+livres(7-dias.length)+'.</p></div>';
+      if(dias.length===7) out+='<div class="note">Você marcou os 7 dias. Deixe pelo menos um dia livre por semana. Descansar faz parte do plano.</div>';
+      if(h>4) out+='<div class="note">Esse é um ritmo grande. Se ele for novo para você, comece menor e aumente aos poucos.</div>';
+      return out;
+    }
+    if(st.extra==='folga'){
+      var c=calcMarco(st.marco);
+      if(!c) return '<div class="info"><p>Escolha uma data para ver a sua folga.</p></div>';
+      if(!c.valid) return '<div class="note">Essa data é hoje ou já passou. Escolha uma data futura para calcular a folga.</div>';
+      var after=(st.marco===1&&c.start.getTime()!==today0().getTime())?', depois do Marco 1':'';
+      var o='<div class="info"><p>Contando a partir de '+fmtLong(c.start)+after+', são <strong>'+pl(c.total)+'</strong> até o prazo.</p>'+
+        '<div class="minibar"><span class="w" style="width:'+(100-c.pct)+'%"></span><span class="f" style="width:'+c.pct+'%"></span></div>'+
+        '<ul class="mini-legend"><li><span class="dot w"></span>Trabalho até '+fmtLong(c.internal)+' ('+pl(c.workDays)+')</li>'+
+        '<li><span class="dot f"></span>Folga até '+fmtLong(c.prazo)+' ('+pl(c.folgaDays)+')</li></ul>'+
+        '<p>Combine consigo mesma que a sua meta é <strong>'+fmtLong(c.internal)+'</strong>. Se algo atrapalhar, você ainda tem '+pl(c.folgaDays)+' de folga antes do prazo final.</p></div>';
+      var p1=parseISO(state.marcos[0].prazo);
+      if(st.marco===1&&p1&&c.prazo.getTime()<=p1.getTime()) o+='<div class="note">Este prazo é igual ou anterior ao do Marco 1. Tudo bem se for de propósito.</div>';
+      return o;
+    }
+    return '';
+  }
+
+  function progressHTML(){
+    var cur=STEPS[state.step];
+    return '<div class="progress" role="list" aria-label="Etapas">'+SECTIONS.map(function(name,i){
+      var steps=STEPS.filter(function(s){return s.sec===i;});
+      var pct=0;
+      if(i<cur.sec) pct=100;
+      else if(i===cur.sec){ pct=cur.kind==='pause'?100:Math.round(steps.indexOf(cur)/steps.length*100); }
+      return '<div class="seg'+(i===cur.sec?' current':'')+'" role="listitem"><div class="seg-bar"><i style="width:'+pct+'%"></i></div><span class="seg-name">'+esc(name)+'</span></div>';
+    }).join('')+'</div>';
+  }
+  function welcomeHTML(){
+    return '<section class="card">'+
+      '<p class="kicker">Vamos começar</p>'+
+      '<h1 class="q-title" tabindex="-1">Vamos montar o seu plano para 2027</h1>'+
+      '<p class="help">Agora são só algumas perguntas, uma de cada vez. Não precisa ficar perfeito. Você pode parar quando quiser, continuar depois e mudar qualquer resposta.</p>'+
+      '<ul class="gets"><li><strong>O seu sonho</strong> escrito com as suas palavras.</li>'+
+      '<li><strong>Dois marcos</strong> do seu objetivo, cada um com data, meta interna e folga.</li>'+
+      '<li><strong>Uma parte para os dias difíceis</strong>, feita só com o que você escreveu.</li></ul>'+
+      fieldHTML({path:'nome',type:'text',label:'Como você quer ser chamada?',optional:true,ph:'Seu primeiro nome'})+
+      '<div class="actions"><button type="button" class="btn btn-ghost" data-act="demo">Ver um exemplo pronto</button><span class="spacer"></span><button type="button" class="btn btn-primary" data-act="next">Começar</button></div>'+
+      '</section>';
+  }
+  function pauseHTML(st){
+    return '<section class="card"><p class="kicker">Pausa</p>'+
+      '<h1 class="q-title" tabindex="-1">'+esc(st.title)+'</h1>'+
+      '<p class="help">'+esc(st.text)+'</p>'+
+      '<div class="actions"><button type="button" class="btn btn-text" data-act="prev">Voltar</button><span class="spacer"></span>'+
+      '<button type="button" class="btn btn-ghost" data-act="stop">Parar por hoje e ver meu plano</button>'+
+      '<button type="button" class="btn btn-primary" data-act="next">Continuar</button></div></section>';
+  }
+  function questionHTML(st){
+    var kick=(st.marco!=null)?'Marco '+(st.marco+1)+' · '+st.pos+' de 5':st.kicker;
+    var ex=(st.examples&&st.examples.length)?'<div class="examples"><p class="ex-title">Exemplos</p><ul>'+st.examples.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul></div>':'';
+    var last=state.step===STEPS.length-1;
+    return '<section class="card">'+
+      '<p class="kicker">'+esc(kick)+'</p>'+
+      '<h1 class="q-title" tabindex="-1">'+esc(st.title)+'</h1>'+
+      '<p class="help">'+esc(st.help)+'</p>'+ex+
+      st.fields.map(fieldHTML).join('')+
+      (st.extra?'<div id="extra" aria-live="polite">'+extraHTML(st)+'</div>':'')+
+      '<div class="actions"><button type="button" class="btn btn-ghost" data-act="prev">Voltar</button><span class="spacer"></span>'+
+      '<button type="button" class="btn btn-text" data-act="skip">Pular por enquanto</button>'+
+      '<button type="button" class="btn btn-primary" data-act="next">'+(last?'Ver meu plano':'Continuar')+'</button></div>'+
+      '</section>';
+  }
+
+  /* ---------- peças do app ---------- */
+  function editLink(id,label){
+    if(demoReal) return '';
+    return '<button type="button" class="edit" data-act="edit" data-step="'+id+'">'+esc(label||'Editar')+'</button>';
+  }
+  function ans(v,id){
+    var t=(v||'').trim();
+    if(t) return '<span class="a">'+esc(t)+'</span>';
+    return '<span class="empty">Ainda em branco. '+editLink(id,'Preencher')+'</span>';
+  }
+  function demoBanner(){
+    return demoReal?'<div class="banner demo">Este é um exemplo com dados fictícios. Nada do que você fizer aqui é salvo. <button type="button" class="edit" data-act="exit-demo">Sair do exemplo</button></div>':'';
+  }
+  function moodChipsHTML(act,cur){
+    return '<div class="chips" role="group" aria-label="Como você está">'+MOODS.map(function(m){
+      return '<button type="button" class="chip" data-act="'+act+'" data-val="'+m[0]+'" aria-pressed="'+(cur===m[0])+'">'+m[1]+'</button>';
+    }).join('')+'</div>';
+  }
+  function taskHTML(date,t){
+    var tag=t.m===1?'<span class="tag m1">Marco 1</span>':(t.m===2?'<span class="tag m2">Marco 2</span>':'');
+    return '<li class="task'+(t.d?' done':'')+'"><button type="button" class="check" role="checkbox" aria-checked="'+(!!t.d)+'" data-act="toggle" data-date="'+date+'" data-id="'+esc(t.id)+'" aria-label="Marcar como feito: '+esc(t.t)+'">'+CHECK_SVG+'</button>'+
+      '<span class="task-t">'+esc(t.t)+tag+'</span>'+
+      '<button type="button" class="x" data-act="deltask" data-date="'+date+'" data-id="'+esc(t.id)+'" aria-label="Apagar este passo">&times;</button></li>';
+  }
+  function addFormHTML(date){
+    var opts='<option value="0">Sem marco</option>'+state.marcos.map(function(mk,i){
+      var n=(mk.nome||'').trim();
+      return '<option value="'+(i+1)+'">Marco '+(i+1)+(n?': '+esc(n.slice(0,24)):'')+'</option>';
+    }).join('');
+    return '<div class="addrow"><input type="text" id="add-'+date+'" data-keep="1" maxlength="160" placeholder="Escreva um passo pequeno" autocomplete="off" aria-label="Novo passo">'+
+      '<select id="addm-'+date+'" data-keep="1" aria-label="Marco deste passo">'+opts+'</select>'+
+      '<button type="button" class="btn btn-primary btn-sm" data-act="addtask" data-date="'+date+'">Adicionar</button></div>';
+  }
+  function taskBlockHTML(date){
+    var ts=state.tasks[date]||[];
+    var list=ts.length?'<ul class="tasks">'+ts.map(function(t){return taskHTML(date,t);}).join('')+'</ul>':'<p class="empty-tasks">Nenhum passo ainda.</p>';
+    var over=ts.length>3?'<div class="note" style="margin:0 0 10px">Você colocou '+ts.length+' passos neste dia. Pense em deixar só os 3 mais importantes.</div>':'';
+    return list+over+addFormHTML(date);
+  }
+  function constanciaHTML(){
+    var t=today0(), cols='';
+    for(var i=13;i>=0;i--){
+      var d=addDays(t,-i), iso=isoOf(d);
+      cols+='<div class="dotcol"><span class="dd'+(isActiveDay(iso)?' on':'')+(i===0?' today':'')+'" title="'+esc(fmtDM(d))+'"></span><span>'+DAYS_LONG[(d.getDay()+6)%7].charAt(0)+'</span></div>';
+    }
+    var n=activeCount(14);
+    return '<div class="dots" role="img" aria-label="Dias com passos feitos nos últimos 14 dias">'+cols+'</div>'+
+      '<p class="muted small" style="margin:0">Você fez passos em <strong>'+n+' de 14 dias</strong>. Dias de descanso também fazem parte do plano.</p>';
+  }
+  function marcoBarsHTML(){
+    return state.marcos.map(function(mk,i){
+      var nome=(mk.nome||'').trim();
+      if(!nome&&!mk.prazo&&!mk.pct) return '';
+      var c=calcMarco(i), p=Math.max(0,Math.min(100,mk.pct||0));
+      var sub=(c&&c.valid)?'Meta interna em '+fmtLong(c.internal)+'. Prazo final em '+fmtLong(c.prazo)+'.':(mk.prazo?'Prazo: '+(parseISO(mk.prazo)?fmtLong(parseISO(mk.prazo)):''):'Sem data ainda.');
+      return '<div class="mrow"><div class="mrow-h"><span>Marco '+(i+1)+(nome?': '+esc(nome):'')+'</span><strong>'+p+'%</strong></div><div class="bar" role="img" aria-label="'+p+'% do marco '+(i+1)+'"><i style="width:'+p+'%"></i></div><p class="muted small" style="margin:6px 0 0">'+sub+'</p></div>';
+    }).join('');
+  }
+
+  /* ---------- telas: hoje ---------- */
+  function renderHoje(){
+    var t=today0(), iso=isoOf(t), nm=(state.nome||'').trim(), hour=new Date().getHours();
+    var greet=hour<12?'Bom dia':(hour<18?'Boa tarde':'Boa noite');
+    var rem='';
+    if(!demoReal){
+      if(!(state.concurso||'').trim()){
+        rem+='<div class="remind"><span>Falta montar o seu plano. Leva só alguns minutos e dá para parar quando quiser.</span><button type="button" class="btn btn-primary btn-sm" data-act="view" data-view="wizard">Montar meu plano</button></div>';
+      } else if(!(peekWeek(isoOf(mondayOf(t))).oque||'').trim()&&!(state.passo.oque||'').trim()){
+        rem+='<div class="remind"><span>Lembrete: escreva o seu primeiro passo desta semana.</span><button type="button" class="btn btn-primary btn-sm" data-act="view" data-view="semana">Escrever agora</button></div>';
+      }
+    }
+    var w=whereInfo();
+    var minBlock='';
+    if((state.hard.minimo||'').trim()){
+      var md=!!state.minDone[iso];
+      minBlock='<section class="card"><h2 class="h2">Se hoje estiver difícil</h2><p class="xl" style="margin:0 0 12px">'+esc(state.hard.minimo.trim())+'</p>'+
+        '<div class="actions" style="margin-top:0"><button type="button" class="btn '+(md?'btn-ghost':'btn-primary')+' btn-sm" data-act="minfeito">'+(md?'Feito hoje. Desmarcar':'Fiz o meu passo mínimo')+'</button>'+
+        '<button type="button" class="btn btn-ghost btn-sm" data-act="usemin">Colocar nos passos de hoje</button></div>'+
+        '<p class="muted small" style="margin:10px 0 0">O passo mínimo conta como um dia de constância.</p></section>';
+    }
+    main.innerHTML=demoBanner()+
+      '<section class="card"><p class="kicker">'+esc(DAYS_LONG[(t.getDay()+6)%7]+', '+fmtDM(t))+'</p>'+
+      '<h1 class="h-title" tabindex="-1">'+greet+(nm?', '+esc(nm):'')+'</h1>'+
+      '<p class="help" style="margin-bottom:12px">Como você está hoje?</p>'+moodChipsHTML('mood',state.mood[iso]||'')+'</section>'+rem+
+      '<section class="card"><h2 class="h2">Meus passos de hoje</h2>'+
+      '<p class="muted small" style="margin:0 0 12px">Escolha poucos passos, pequenos e possíveis. Três já é bastante.</p>'+taskBlockHTML(iso)+'</section>'+
+      minBlock+
+      '<section class="card"><h2 class="h2">Onde eu estou</h2>'+(w?'<p class="where">'+whereSentence(w)+'</p>':'<p class="muted" style="margin:0 0 12px">Quando você definir as datas dos marcos, o caminho aparece aqui.</p>')+marcoBarsHTML()+'</section>'+
+      '<section class="card"><h2 class="h2">Minha constância</h2>'+constanciaHTML()+'</section>'+
+      '<div class="actions"><button type="button" class="btn btn-primary" data-act="view" data-view="porque">Relembrar meu porquê</button></div>';
+  }
+
+  /* ---------- telas: semana ---------- */
+  function renderSemana(){
+    if(!weekRef) weekRef=mondayOf(today0());
+    var mon=weekRef, monIso=isoOf(mon), thisIso=isoOf(mondayOf(today0()));
+    if(monIso===thisIso&&!state.weeks[monIso]&&(state.passo.oque||'').trim()&&!demoReal) state.weeks[monIso]=clone(state.passo);
+    var wk=peekWeek(monIso), st=weekStats(monIso);
+    var pct=st.total?Math.round(st.done/st.total*100):0;
+    var days='';
+    for(var i=0;i<7;i++){
+      var d=addDays(mon,i), iso=isoOf(d), isToday=iso===isoOf(today0());
+      days+='<section class="day'+(isToday?' today':'')+'" aria-label="'+DAYS_LONG[i]+'"><div class="day-h"><span>'+DAYS_LONG[i]+'</span><span class="muted">'+esc(fmtDM(d))+'</span>'+
+        (isToday?'<span class="tag now">Hoje</span>':'')+(freeDow(i)?'<span class="tag free">Dia livre</span>':'')+'</div>'+taskBlockHTML(iso)+'</section>';
+    }
+    var extras=(state.hard.passos||[]).map(function(s,i){
+      return '<li class="task"><span class="dd on" style="width:12px;height:12px"></span><span class="task-t">'+esc(s)+'</span><button type="button" class="x" data-act="delhard" data-idx="'+i+'" aria-label="Apagar este passo">&times;</button></li>';
+    }).join('');
+    var freio=(state.hard.freio||'').trim();
+    main.innerHTML=demoBanner()+
+      '<section class="card"><p class="kicker">Minha semana</p><h1 class="h-title" tabindex="-1">Organize os seus dias</h1>'+
+      '<div class="weeknav"><button type="button" class="navarrow" data-act="wk-prev" aria-label="Semana anterior">&#8249;</button><div class="range">'+esc(fmtRange(mon,addDays(mon,6)))+'</div><button type="button" class="navarrow" data-act="wk-next" aria-label="Próxima semana">&#8250;</button></div>'+
+      (monIso!==thisIso?'<p style="margin:0 0 10px"><button type="button" class="edit" data-act="wk-now">Voltar para esta semana</button></p>':'')+
+      '<div class="bar sky" role="img" aria-label="'+pct+'% dos passos da semana feitos"><i style="width:'+pct+'%"></i></div>'+
+      '<p class="muted small" style="margin:8px 0 0">'+st.done+' de '+st.total+' passos feitos nesta semana.</p></section>'+
+      '<section class="card"><h2 class="h2">Meu primeiro passo desta semana</h2>'+
+      '<p class="muted small" style="margin:0 0 14px">Um passo pequeno para começar a semana. Ele vale mais do que um plano enorme que não sai do papel.</p>'+
+      '<div class="field"><label class="lbl" for="wk-oque">O que eu vou fazer</label><input type="text" id="wk-oque" data-wk="oque" value="'+esc(wk.oque)+'" placeholder="Ex.: Separar o material e dividir em blocos" autocomplete="off"></div>'+
+      '<div class="field"><label class="lbl" for="wk-quando">Quando</label><input type="text" id="wk-quando" data-wk="quando" value="'+esc(wk.quando)+'" placeholder="Ex.: Quinta-feira, às 20h, por 15 minutos" autocomplete="off"></div>'+
+      '<div class="field" style="margin-bottom:0"><label class="lbl" for="wk-como">Como e onde</label><input type="text" id="wk-como" data-wk="como" value="'+esc(wk.como)+'" placeholder="Ex.: Na mesa da sala, com um marcador e papel" autocomplete="off"></div>'+
+      (freio?'<div class="note">Meu freio de empolgação: '+esc(freio)+'</div>':'')+'</section>'+
+      '<section class="section" style="margin-top:14px">'+days+'</section>'+
+      '<section class="card" style="margin-top:14px"><h2 class="h2">Para os dias difíceis</h2>'+
+      '<p class="muted small" style="margin:0 0 14px">Deixe passos prontos para quando o desânimo chegar. Eles aparecem na tela Relembrar meu porquê.</p>'+
+      '<div class="field"><label class="lbl" for="f-hard-minimo">Meu passo mínimo, o menor que ainda conta</label><input type="text" id="f-hard-minimo" data-path="hard.minimo" value="'+esc(state.hard.minimo)+'" placeholder="Ex.: 10 minutos de revisão" autocomplete="off"></div>'+
+      '<div class="lbl" style="margin-bottom:6px">Outros passos para dias difíceis</div>'+
+      (extras?'<ul class="tasks">'+extras+'</ul>':'<p class="empty-tasks">Nenhum ainda. Ex.: abrir o caderno e ler uma página; ouvir um áudio da matéria.</p>')+
+      '<div class="addrow"><input type="text" id="add-hard" data-keep="1" maxlength="160" placeholder="Escreva outro passo pequeno" autocomplete="off" aria-label="Outro passo para dias difíceis"><button type="button" class="btn btn-primary btn-sm" data-act="addhard">Adicionar</button></div></section>';
+  }
+
+  /* ---------- telas: diário ---------- */
+  function draftFrom(e){ return {id:e.id,date:e.date,humor:e.humor||'',a:e.a||'',b:e.b||'',c:e.c||'',share:!!e.share}; }
+  function newDraft(date){
+    var found=null;
+    state.diary.forEach(function(e){ if(e.date===date) found=e; });
+    return found?draftFrom(found):{id:null,date:date,humor:'',a:'',b:'',c:'',share:false};
+  }
+  function renderDiario(){
+    if(!draft) draft=newDraft(isoOf(today0()));
+    var dd=parseISO(draft.date)||today0();
+    var form='<section class="card"><p class="kicker">Meu diário</p><h1 class="h-title" tabindex="-1">Como foi o seu dia?</h1>'+
+      '<p class="help">Escreva do seu jeito. Pode ser curto. Ninguém precisa ler, a não ser que você queira.</p>'+
+      '<div class="field"><label class="lbl" for="d-date">Dia</label><input type="date" id="d-date" data-draft="date" value="'+esc(draft.date)+'"></div>'+
+      '<div class="field"><div class="lbl">Como você está?</div>'+moodChipsHTML('dmood',draft.humor)+'</div>'+
+      '<div class="field"><label class="lbl" for="d-a">Como foi o meu dia?</label><textarea id="d-a" data-draft="a" rows="3" placeholder="Conte do seu jeito, pode ser bem curtinho.">'+esc(draft.a)+'</textarea></div>'+
+      '<div class="field"><label class="lbl" for="d-b">O que eu fiz pelo meu objetivo hoje?</label><textarea id="d-b" data-draft="b" rows="3" placeholder="Mesmo um passo pequeno conta.">'+esc(draft.b)+'</textarea></div>'+
+      '<div class="field"><label class="lbl" for="d-c">Uma coisa boa que aconteceu</label><textarea id="d-c" data-draft="c" rows="3" placeholder="Pode ser qualquer coisa, até pequena.">'+esc(draft.c)+'</textarea></div>'+
+      '<label class="check-row"><input type="checkbox" id="d-share" data-draft="share"'+(draft.share?' checked':'')+'><span>Incluir esta anotação no resumo para a minha mentora</span></label>'+
+      '<p class="muted small" style="margin:8px 0 0">Se você não marcar, esta anotação é só sua e não aparece no resumo.</p>'+
+      '<div class="actions"><button type="button" class="btn btn-primary" data-act="dsave">Salvar anotação</button>'+(draft.id?'<span class="muted small">Editando a anotação de '+esc(fmtDM(dd))+'</span>':'')+'</div></section>';
+    var list=state.diary.slice().sort(function(x,y){return x.date<y.date?1:(x.date>y.date?-1:0);}).map(function(e){
+      var d=parseISO(e.date), conf=confirmDel===e.id;
+      var parts='';
+      if((e.a||'').trim()) parts+='<span class="q">Como foi o dia</span><p>'+esc(e.a)+'</p>';
+      if((e.b||'').trim()) parts+='<span class="q">O que fiz pelo meu objetivo</span><p>'+esc(e.b)+'</p>';
+      if((e.c||'').trim()) parts+='<span class="q">Uma coisa boa</span><p>'+esc(e.c)+'</p>';
+      return '<article class="entry"><div class="entry-h"><strong>'+esc(d?DAYS_LONG[(d.getDay()+6)%7]+', '+fmtDM(d):e.date)+'</strong><span>'+
+        (e.humor?'<span class="tag">'+esc(moodLabel(e.humor))+'</span>':'')+(e.share?'<span class="tag shared">Compartilhada</span>':'')+'</span></div>'+parts+
+        '<div class="entry-actions">'+(conf?
+          '<span class="muted small">Apagar esta anotação?</span><button type="button" class="btn btn-danger btn-sm" data-act="ddel-yes" data-id="'+esc(e.id)+'">Apagar</button><button type="button" class="btn btn-ghost btn-sm" data-act="ddel-no">Cancelar</button>':
+          '<button type="button" class="btn btn-ghost btn-sm" data-act="dedit" data-id="'+esc(e.id)+'">Editar</button><button type="button" class="btn btn-text btn-sm" data-act="ddel" data-id="'+esc(e.id)+'">Apagar</button>')+'</div></article>';
+    }).join('');
+    main.innerHTML=demoBanner()+form+
+      '<section class="section"><div class="sec-head"><h2>Minhas anotações</h2></div>'+(list||'<div class="card"><p class="muted" style="margin:0">Quando você salvar a primeira anotação, ela aparece aqui.</p></div>')+'</section>';
+  }
+
+  /* ---------- telas: progresso ---------- */
+  function newCI(){ return {pcts:[state.marcos[0].pct||0,state.marcos[1].pct||0],humor:'',funcionou:'',ajustar:''}; }
+  function renderProgresso(){
+    if(!ci) ci=newCI();
+    var mon=isoOf(mondayOf(today0())), ws=weekStats(mon);
+    var sliders=state.marcos.map(function(mk,i){
+      var nome=(mk.nome||'').trim();
+      return '<div class="field"><label class="lbl" for="ci-pct'+i+'">Quanto do Marco '+(i+1)+(nome?' ('+esc(nome)+')':'')+' já está pronto?</label>'+
+        '<div class="inline"><input type="range" id="ci-pct'+i+'" data-ci="pct'+i+'" min="0" max="100" step="5" value="'+(ci.pcts[i]||0)+'"><strong id="pct-out-'+i+'" style="min-width:46px;text-align:right">'+(ci.pcts[i]||0)+'%</strong></div></div>';
+    }).join('');
+    var done=ciDone?'<div class="banner">Registro salvo. Se quiser, envie um resumo para a sua mentora logo abaixo.</div>':'';
+    ciDone=false;
+    var hist=state.checkins.slice().reverse().map(function(c){
+      var d=new Date(c.at);
+      return '<article class="entry"><div class="entry-h"><strong>'+esc(isNaN(d.getTime())?'':d.toLocaleDateString('pt-BR',{day:'numeric',month:'long'}))+'</strong><span>'+
+        (c.humor?'<span class="tag">'+esc(moodLabel(c.humor))+'</span>':'')+'</span></div>'+
+        '<p><strong>Marco 1: '+(c.pcts&&c.pcts[0]||0)+'%</strong> · <strong>Marco 2: '+(c.pcts&&c.pcts[1]||0)+'%</strong></p>'+
+        '<p class="muted small">Passos feitos na semana: '+(c.feitas||0)+' de '+(c.total||0)+'</p>'+
+        ((c.funcionou||'').trim()?'<span class="q">O que funcionou</span><p>'+esc(c.funcionou)+'</p>':'')+
+        ((c.ajustar||'').trim()?'<span class="q">O que vou ajustar</span><p>'+esc(c.ajustar)+'</p>':'')+'</article>';
+    }).join('');
+    main.innerHTML=demoBanner()+done+
+      '<section class="card"><p class="kicker">Meu progresso</p><h1 class="h-title" tabindex="-1">Como está o caminho?</h1>'+marcoBarsHTML()+
+      '<h2 class="h2" style="margin-top:18px">Minha constância</h2>'+constanciaHTML()+'</section>'+
+      '<section class="card"><h2 class="h2">Como foi a sua semana?</h2>'+
+      '<p class="help">Quando quiser, conte aqui como está indo. Não precisa ser perfeito, só verdadeiro. Depois de registrar, você pode enviar um resumo para a sua mentora.</p>'+
+      '<p class="muted small" style="margin:0 0 14px">Passos feitos nesta semana: <strong>'+ws.done+' de '+ws.total+'</strong></p>'+sliders+
+      '<div class="field"><div class="lbl">Como você está?</div>'+moodChipsHTML('cimood',ci.humor)+'</div>'+
+      '<div class="field"><label class="lbl" for="ci-f">O que funcionou?</label><textarea id="ci-f" data-ci="funcionou" rows="3" placeholder="Ex.: Estudar logo cedo me ajudou.">'+esc(ci.funcionou)+'</textarea></div>'+
+      '<div class="field"><label class="lbl" for="ci-a">O que eu vou ajustar?</label><textarea id="ci-a" data-ci="ajustar" rows="3" placeholder="Ex.: Vou reduzir para dois passos por dia.">'+esc(ci.ajustar)+'</textarea></div>'+
+      '<div class="actions"><button type="button" class="btn btn-primary" data-act="cisave">Registrar progresso</button></div></section>'+
+      sendSumHTML()+
+      '<section class="section"><div class="sec-head"><h2>Meus registros</h2></div>'+(hist||'<div class="card"><p class="muted" style="margin:0">Os seus registros semanais aparecem aqui.</p></div>')+'</section>';
+  }
+
+  /* ---------- telas: meu plano ---------- */
+  function heroHTML(){
+    var c=(state.concurso||'').trim(), ce=(state.cena||'').trim(), p=(state.porque||'').trim();
+    function emp(id){ return '<span class="hero-empty">Ainda em branco. '+editLink(id,'Preencher')+'</span>'; }
+    return '<section class="hero" aria-label="Meu sonho">'+
+      '<div><p class="kicker">Meu objetivo</p>'+(c?'<h2>'+esc(c)+'</h2>':'<p>'+emp('concurso')+'</p>')+'</div>'+
+      '<div class="hero-cols">'+
+        '<div><p class="kicker">Como será a minha vida</p>'+(ce?'<p class="quote">'+esc(ce)+'</p>':'<p>'+emp('cena')+'</p>')+'</div>'+
+        '<div><p class="kicker">Por que isso importa</p>'+(p?'<p class="quote">'+esc(p)+'</p>':'<p>'+emp('porque')+'</p>')+'</div>'+
+      '</div>'+
+      (demoReal?'':'<p class="hero-foot">'+editLink('concurso','Editar meu sonho')+'</p>')+
+      '</section>';
+  }
+  function timelineHTML(){
+    var segs=getSegments(), body;
+    if(!segs.length){
+      body='<p class="muted" style="margin:0">Escolha as datas dos marcos para ver a sua linha do tempo. '+editLink('m0t','Definir datas')+'</p>';
+    } else {
+      var total=diffDays(segs[0].from,segs[segs.length-1].to);
+      var bar=segs.filter(function(s){return diffDays(s.from,s.to)>0;}).map(function(s){
+        return '<span class="'+s.k+'" style="width:'+(diffDays(s.from,s.to)/total*100).toFixed(2)+'%"></span>';
+      }).join('');
+      var legend=segs.map(function(s){
+        return '<li><span class="dot '+s.k+'"></span><span><strong>'+esc(s.label)+'</strong><br><span class="muted">'+fmtLong(s.from)+' até '+fmtLong(s.to)+' · '+pl(diffDays(s.from,s.to))+'</span></span></li>';
+      }).join('');
+      var w=whereInfo();
+      body='<p class="where">Hoje é '+fmtLong(today0())+'. '+(w?whereSentence(w):'')+'</p>'+
+        '<div class="tlbar" role="img" aria-label="Linha do tempo com períodos de trabalho e de folga">'+bar+'</div>'+
+        '<ul class="tllegend">'+legend+'</ul>';
+    }
+    return '<section class="section"><div class="sec-head"><h2>Linha do tempo</h2></div><div class="card">'+body+'</div></section>';
+  }
+  function tRow(i){
+    var mk=state.marcos[i], p=parseISO(mk.prazo);
+    if(!p) return '<span class="empty">Ainda em branco. '+editLink('m'+i+'t','Preencher')+'</span>';
+    var c=calcMarco(i);
+    var boxes='<div class="dbox"><span class="k">Prazo final</span><span class="v">'+fmtLong(p)+'</span></div>';
+    if(c&&c.valid){
+      boxes+='<div class="dbox folga"><span class="k">Meta interna</span><span class="v">'+fmtLong(c.internal)+'</span></div>'+
+        '<div class="dbox folga"><span class="k">Folga</span><span class="v">'+pl(c.folgaDays)+' ('+c.pct+'%)</span></div>';
+    }
+    return '<div class="dates">'+boxes+'</div>';
+  }
+  function marcoHTML(i){
+    var mk=state.marcos[i], n=i+1, sid='m'+i;
+    var nome=(mk.nome||'').trim();
+    var dias=sortedDias(mk), h=num(mk.horas), obs=(mk.obs||'').trim(), aBody='';
+    if(dias.length&&h){
+      aBody+='<span class="a">'+dias.map(function(d){return DAYS[d];}).join(', ')+' · '+fmtH(h)+' por dia · <strong>'+fmtH(dias.length*h)+' por semana</strong>, com '+livres(7-dias.length)+'</span>';
+    }
+    if(obs) aBody+='<span class="a sub">O que pode atrapalhar: '+esc(obs)+'</span>';
+    if(!aBody) aBody='<span class="empty">Ainda em branco. '+editLink(sid+'a','Preencher')+'</span>';
+    var rows=[['O que vai estar pronto',ans(mk.s,sid+'s')],['Como vou saber que cheguei lá',ans(mk.m,sid+'m')],['Tempo que consigo dedicar',aBody],['Por que este marco importa',ans(mk.r,sid+'r')],['Prazo',tRow(i)]];
+    return '<article class="marco"><div class="marco-head"><div><p class="kicker">Marco '+n+'</p><h3>'+(nome?esc(nome):'Marco sem nome')+'</h3></div>'+editLink(sid+'s','Editar este marco')+'</div>'+
+      '<ul class="smart">'+rows.map(function(r){
+        return '<li><span class="t">'+r[0]+'</span>'+r[1]+'</li>';
+      }).join('')+'</ul></article>';
+  }
+  function passoHTML(){
+    var p=state.passo;
+    function row(k,v){ return '<div class="kv"><span class="k">'+k+'</span>'+ans(v,'passo')+'</div>'; }
+    return '<section class="section"><div class="sec-head"><h2>Primeiro passo</h2>'+editLink('passo')+'</div>'+
+      '<div class="card kvs">'+row('O que eu vou fazer',p.oque)+row('Quando',p.quando)+row('Como e onde',p.como)+'</div></section>';
+  }
+  function hardSectionHTML(){
+    var h=state.hard;
+    var rows=[['Quando eu desanimo, costuma acontecer',h.acontece,'h0'],['Meu freio quando estiver empolgada',h.freio,'h1'],['O menor passo que ainda conta',h.minimo,'h2'],['Se eu atrasar, eu combino comigo que',h.atraso,'h3'],['Minha frase',h.frase,'h4']];
+    if((h.apoio||'').trim()) rows.push(['Quem pode me lembrar do meu porquê',h.apoio,'h4']);
+    return '<section class="section"><div class="sec-head"><h2>Para os dias difíceis</h2>'+editLink('h0')+'</div>'+
+      '<div class="card kvs">'+rows.map(function(r){return '<div class="kv"><span class="k">'+r[0]+'</span>'+ans(r[1],r[2])+'</div>';}).join('')+'</div></section>';
+  }
+  function planText(){
+    var L=[];
+    function t(v){ return (v||'').trim()||'(em branco)'; }
+    var nm=(state.nome||'').trim();
+    L.push('MEU PLANO 2027'+(nm?' - '+nm:''),'');
+    L.push('MEU OBJETIVO',t(state.concurso),'');
+    L.push('COMO SERÁ A MINHA VIDA',t(state.cena),'');
+    L.push('POR QUE ISSO IMPORTA',t(state.porque),'');
+    state.marcos.forEach(function(mk,i){
+      var c=calcMarco(i), dias=sortedDias(mk), h=num(mk.horas), p=parseISO(mk.prazo);
+      L.push('MARCO '+(i+1)+': '+t(mk.nome));
+      L.push('O que vai estar pronto: '+t(mk.s));
+      L.push('Como vou saber que cheguei lá: '+t(mk.m));
+      L.push('Tempo que consigo dedicar: '+((dias.length&&h)?dias.map(function(d){return DAYS[d];}).join(', ')+', '+fmtH(h)+' por dia ('+fmtH(dias.length*h)+' por semana)':'(em branco)')+((mk.obs||'').trim()?'. O que pode atrapalhar: '+mk.obs.trim():''));
+      L.push('Por que este marco importa: '+t(mk.r));
+      L.push('Prazo: '+(p?'prazo final '+fmtLong(p)+((c&&c.valid)?'; meta interna '+fmtLong(c.internal)+'; folga de '+pl(c.folgaDays):''):'(em branco)'),'');
+    });
+    L.push('PRIMEIRO PASSO','O que: '+t(state.passo.oque),'Quando: '+t(state.passo.quando),'Como e onde: '+t(state.passo.como),'');
+    var h=state.hard;
+    L.push('PARA OS DIAS DIFÍCEIS','Quando eu desanimo: '+t(h.acontece),'Meu freio quando estiver empolgada: '+t(h.freio),'Menor passo que ainda conta: '+t(h.minimo),'Se eu atrasar: '+t(h.atraso),'Minha frase: '+t(h.frase));
+    if((h.apoio||'').trim()) L.push('Quem pode me lembrar do meu porquê: '+h.apoio.trim());
+    return L.join('\n');
+  }
+  function renderPlano(){
+    var nm=(state.nome||'').trim(), banner='';
+    if(justFinished){
+      banner='<div class="banner">'+(storageOk||cloud.ok?'Pronto. O seu plano está salvo. Agora é só usar: veja a aba Hoje e escolha o seu primeiro passo.':'Pronto. O navegador não permitiu salvar automaticamente. Use o botão Copiar plano em texto, no fim da página, para guardar uma cópia.')+'</div>';
+    }
+    var html=demoBanner()+banner+
+      '<div><p class="kicker">Meu plano</p><h1 class="h-title" tabindex="-1">'+(nm?esc(nm)+', este é o seu plano':'Este é o seu plano')+'</h1>'+
+      '<p class="plan-sub">Volte aqui sempre que precisar lembrar o que você quer e para onde está indo. Você pode editar qualquer resposta.</p></div>'+
+      heroHTML()+timelineHTML()+
+      '<section class="section"><div class="sec-head"><h2>Meus marcos</h2></div>'+marcoHTML(0)+marcoHTML(1)+'</section>'+
+      passoHTML()+hardSectionHTML();
+    if(!demoReal){
+      html+=''+sendSumHTML()+
+        '<section class="section"><div class="actions" style="margin-top:0"><button type="button" class="btn btn-primary" data-act="edit" data-step="welcome">Refazer as perguntas</button><button type="button" class="btn btn-ghost" data-act="copy">Copiar plano em texto</button><span id="copymsg" class="muted small" role="status"></span></div>'+
+        '<div id="copybox" hidden><textarea id="copytext" readonly rows="10" aria-label="Texto do plano"></textarea></div>'+
+        '<div id="reset-area" class="reset"><button type="button" class="btn btn-text" data-act="reset-ask">Recomeçar do zero</button></div>'+
+        '<p class="foot">Suas respostas são salvas automaticamente. Guardar uma cópia em texto, numa nota ou mensagem, é uma segurança a mais.</p></section>';
+    }
+    main.innerHTML=html;
+    justFinished=false;
+  }
+
+  /* ---------- telas: relembrar meu porquê ---------- */
+  function renderPorque(){
+    var hd=state.hard, iso=isoOf(today0());
+    function txt(v,id,cls){
+      var t=(v||'').trim();
+      return t?'<p class="'+cls+'">'+esc(t)+'</p>':'<p class="muted">Ainda em branco.'+(demoReal?'':' '+editLink(id,'Escrever agora'))+'</p>';
+    }
+    var w=whereInfo();
+    var atraso=(hd.atraso||'').trim(), frase=(hd.frase||'').trim(), apoio=(hd.apoio||'').trim();
+    var passos=(hd.passos||[]).length?'<ul class="steplist">'+hd.passos.map(function(s){return '<li>'+esc(s)+'</li>';}).join('')+'</ul>':'';
+    main.innerHTML=demoBanner()+'<div class="hard">'+
+      '<section class="panel"><p class="kicker">Antes de ler</p><h1 class="h-title" tabindex="-1" style="margin-bottom:8px">Respire e leia o que você escreveu</h1><p class="muted">Esta página é feita só com as suas palavras. Leia com calma e escolha apenas o próximo passo pequeno.</p></section>'+
+      '<section class="panel big"><p class="kicker">O que eu quero</p>'+txt(state.concurso,'concurso','xl')+'</section>'+
+      '<section class="panel big"><p class="kicker">Por que eu comecei</p>'+txt(state.porque,'porque','xl')+'</section>'+
+      '<section class="panel"><p class="kicker">Como vai ser a minha vida</p>'+txt(state.cena,'cena','a')+'</section>'+
+      (frase?'<section class="panel"><p class="kicker">A minha frase</p><p class="xl">'+esc(frase)+'</p></section>':'')+
+      '<section class="panel step"><p class="kicker">O meu passo de hoje</p>'+txt(hd.minimo,'h2','xl')+passos+
+      '<div class="actions" style="margin-top:14px"><button type="button" class="btn '+(state.minDone[iso]?'btn-ghost':'btn-primary')+'" data-act="minfeito">'+(state.minDone[iso]?'Feito hoje. Desmarcar':'Fiz um passo pequeno hoje')+'</button></div></section>'+
+      (w?'<section class="panel"><p class="kicker">Onde eu estou</p><p>'+whereSentence(w)+'</p></section>':'')+
+      '<section class="panel"><p class="kicker">Se eu atrasei</p><p class="a">'+(atraso?esc(atraso):'Atrasar não apaga o que você já fez. Use a folga e volte para o próximo passo pequeno.')+'</p></section>'+
+      (apoio?'<section class="panel"><p class="kicker">Quem pode me lembrar</p><p class="a">'+esc(apoio)+'</p></section>':'')+
+      '<div class="actions" style="margin-top:6px"><button type="button" class="btn btn-primary" data-act="view" data-view="hoje">Voltar para o início</button></div>'+
+      '</div>';
+  }
+
+  /* ---------- telas: como funciona e primeira vez ---------- */
+  function renderIntro(){
+    var s=HOW[introIdx], last=introIdx===HOW.length-1;
+    var dots='<div class="stepdots" aria-hidden="true">'+HOW.map(function(x,i){return '<i'+(i<=introIdx?' class="on"':'')+'></i>';}).join('')+'</div>';
+    main.innerHTML='<section class="card">'+dots+'<p class="kicker">Como funciona · '+(introIdx+1)+' de '+HOW.length+'</p>'+
+      '<h1 class="q-title" tabindex="-1">'+esc(s.title)+'</h1>'+howBodyHTML(s)+
+      '<div class="actions">'+(introIdx>0?'<button type="button" class="btn btn-ghost" data-act="intro-prev">Voltar</button>':'')+'<span class="spacer"></span>'+
+      (last?'':'<button type="button" class="btn btn-text" data-act="intro-skip">Pular</button>')+
+      '<button type="button" class="btn btn-primary" data-act="intro-next">'+(last?'Montar meu plano':'Continuar')+'</button></div></section>';
+  }
+  function renderComo(){
+    main.innerHTML='<div><p class="kicker">Como funciona</p><h1 class="h-title" tabindex="-1">Tudo explicadinho</h1><p class="plan-sub">Se ficar com dúvida, volte aqui quando quiser.</p></div>'+
+      HOW.map(function(s,i){
+        return '<section class="card"><p class="kicker">'+(i+1)+' de '+HOW.length+'</p><h2 class="h2">'+esc(s.title)+'</h2>'+howBodyHTML(s)+'</section>';
+      }).join('')+
+      '<div class="actions"><button type="button" class="btn btn-primary" data-act="view" data-view="hoje">Voltar para o app</button></div>';
+  }
+
+  /* ---------- painel da mentora ---------- */
+  function clientHTML(c){
+    var d=c.data||{}, isNew=(d.activityAt||0)>seenBefore;
+    var nm=(d.nome||'').trim()||'Sem nome';
+    var marcos=(d.marcos||[]).map(function(m,i){
+      var p=Math.max(0,Math.min(100,m.pct||0)), pr=parseISO(m.prazo||''), it=parseISO(m.internal||'');
+      return '<div class="mrow"><div class="mrow-h"><span>Marco '+(i+1)+(m.nome?': '+esc(m.nome):'')+'</span><strong>'+p+'%</strong></div><div class="bar"><i style="width:'+p+'%"></i></div>'+
+        ((pr||it)?'<p class="muted small" style="margin:6px 0 0">'+(it?'Meta interna: '+esc(fmtLong(it))+'. ':'')+(pr?'Prazo final: '+esc(fmtLong(pr))+'.':'')+'</p>':'')+'</div>';
+    }).join('');
+    var cis=d.checkins||[], last=cis.length?cis[cis.length-1]:null, lastHTML='';
+    if(last){
+      var ld=new Date(last.at);
+      lastHTML='<div class="info" style="margin-top:12px"><p><strong>Último registro'+(isNaN(ld.getTime())?'':' ('+esc(ld.toLocaleDateString('pt-BR',{day:'numeric',month:'long'}))+')')+'</strong>'+(last.humor?' · '+esc(moodLabel(last.humor)):'')+'</p>'+
+        ((last.funcionou||'').trim()?'<p><span class="muted">Funcionou:</span> '+esc(last.funcionou)+'</p>':'')+
+        ((last.ajustar||'').trim()?'<p><span class="muted">Vai ajustar:</span> '+esc(last.ajustar)+'</p>':'')+'</div>';
+    }
+    var dia=(d.diario||[]).slice().reverse().map(function(e){
+      var ed=parseISO(e.date||'');
+      return '<div class="entry"><div class="entry-h"><strong>'+esc(ed?fmtDM(ed):e.date||'')+'</strong>'+(e.humor?'<span class="tag">'+esc(moodLabel(e.humor))+'</span>':'')+'</div>'+
+        ((e.a||'').trim()?'<p>'+esc(e.a)+'</p>':'')+((e.b||'').trim()?'<p>'+esc(e.b)+'</p>':'')+((e.c||'').trim()?'<p>'+esc(e.c)+'</p>':'')+'</div>';
+    }).join('');
+    return '<article class="client"><div class="client-h"><h3>'+esc(nm)+'</h3><span>'+(isNew?'<span class="tag now">Novidade</span>':'')+'<span class="muted small"> '+(d.activityAt?'Última atividade '+ago(d.activityAt):'Sem atividade ainda')+'</span></span></div>'+
+      '<p style="margin:0 0 12px"><strong>Objetivo:</strong> '+(d.objetivo?esc(d.objetivo):'<span class="muted">ainda em branco</span>')+'</p>'+marcos+
+      '<p class="muted small" style="margin:10px 0 0">Passos da semana: '+((d.semana&&d.semana.feitas)||0)+' de '+((d.semana&&d.semana.total)||0)+' · Dias com passos nos últimos 14: '+(d.dias14||0)+'</p>'+lastHTML+
+      (dia?'<details><summary>Anotações compartilhadas ('+(d.diario||[]).length+')</summary>'+dia+'</details>':'')+'</article>';
+  }
+  function renderMentora(){
+    if(!cloud.owner){
+      main.innerHTML='<section class="card"><h1 class="h-title" tabindex="-1">Painel da mentora</h1><p class="help" style="margin:0">Esta área é só para quem criou a página.</p></section>';
+      return;
+    }
+    var body=sharedList.length?sharedList.map(clientHTML).join(''):'<div class="card"><p style="margin:0">Ainda ninguém compartilhou o progresso. Quando alguém usar o app e registrar algo, aparece aqui.</p><p class="muted small" style="margin:10px 0 0">Para a pessoa conseguir enviar, compartilhe a página com ela pelo menu Compartilhar, com permissão de contribuidora.</p></div>';
+    main.innerHTML='<div><p class="kicker">Painel da mentora</p><h1 class="h-title" tabindex="-1">Quem está usando o app</h1>'+
+      '<p class="plan-sub">Aqui aparece o que cada pessoa compartilhou: objetivo, marcos, registros de progresso, passos feitos e as anotações do diário que ela marcou para você ler. Só você, dona da página, vê esta área. A etiqueta Novidade marca o que mudou desde a sua última visita.</p></div>'+body;
+  }
+
+  /* ---------- exemplo ---------- */
+  function exampleState(){
+    var t=today0(), s=blank(), mon=mondayOf(t);
+    s.concurso='Analista Judiciário em um Tribunal (exemplo)';
+    s.cena='Acordo sem aquele aperto no peito. Tomo café com calma, vou para o trabalho que escolhi e chego em casa a tempo de jantar com a minha família.';
+    s.porque='Quero segurança para cuidar de quem eu amo e provar para mim mesma que consigo terminar o que começo.';
+    s.marcos[0]=Object.assign(blankMarco(),{nome:'Edital estudado uma vez',s:'Ter lido e resumido as seis matérias principais do edital.',m:'100% do edital marcado como visto e 40 questões resolvidas por matéria.',dias:[0,2,4,5],horas:'2',obs:'Tenho plantão aos sábados. Nesses dias faço só uma revisão rápida.',r:'Sem a base do edital, os simulados não mostram onde estão as minhas lacunas.',prazo:isoOf(addDays(t,140)),folga:30,pct:25});
+    s.marcos[1]=Object.assign(blankMarco(),{nome:'Primeira fase da prova',s:'Fazer simulados completos e revisar os erros de cada um.',m:'8 simulados feitos, com média acima de 70% nos dois últimos.',dias:[0,1,3,4,5],horas:'2.5',obs:'Perto da prova o trabalho aperta, então vou proteger o meu sono.',r:'Os simulados treinam o tempo e a calma que eu vou precisar no dia da prova.',prazo:isoOf(addDays(t,300)),folga:30,pct:0});
+    s.passo={oque:'Separar o edital e dividir as matérias em blocos.',quando:'Quinta-feira, às 20h, por 15 minutos.',como:'Na mesa da sala, com o edital impresso e um marcador.'};
+    s.hard={acontece:'Perco um dia, depois outro, e começo a achar que já perdi tudo.',freio:'Não começo mais de uma matéria nova por semana e não passo das 2 horas do plano.',minimo:'10 minutos de revisão dos meus resumos.',atraso:'Uso a folga, retomo de onde parei e não tento recuperar tudo em um dia.',frase:'Continuar devagar também é continuar.',apoio:'Minha irmã',passos:['Abrir o caderno e ler uma página','Ouvir um áudio da matéria no caminho']};
+    s.weeks[isoOf(mon)]=clone(s.passo);
+    s.tasks[isoOf(t)]=[{id:'e1',t:'Ler o resumo de Direito Constitucional (20 min)',m:1,d:true},{id:'e2',t:'Resolver 10 questões',m:1,d:false}];
+    s.tasks[isoOf(addDays(t,-1))]=[{id:'e3',t:'Revisar os resumos da semana',m:1,d:true}];
+    s.tasks[isoOf(addDays(t,-2))]=[{id:'e4',t:'Separar o material do bloco 2',m:1,d:true}];
+    s.tasks[isoOf(addDays(t,1))]=[{id:'e5',t:'Fazer o primeiro simulado curto',m:2,d:false}];
+    s.minDone[isoOf(addDays(t,-4))]=true;
+    s.mood[isoOf(t)]='tranquila';
+    s.checkins=[{id:'c1',at:addDays(t,-7).toISOString(),week:isoOf(mondayOf(addDays(t,-7))),pcts:[15,0],humor:'ansiosa',funcionou:'Estudar logo cedo me ajudou.',ajustar:'Vou reduzir para dois passos por dia.',feitas:4,total:6},
+      {id:'c2',at:addDays(t,-1).toISOString(),week:isoOf(mon),pcts:[25,0],humor:'tranquila',funcionou:'Ter um passo mínimo me tirou do zero.',ajustar:'Marcar o horário no celular.',feitas:3,total:4}];
+    s.diary=[{id:'d1',date:isoOf(addDays(t,-1)),humor:'cansada',a:'Dia puxado no trabalho.',b:'Fiz só a revisão rápida.',c:'Tomei café com calma.',share:true}];
+    s.seen=true; s.view='hoje';
+    return s;
+  }
+  function startDemo(){ demoReal=state; state=exampleState(); weekRef=null; draft=null; ci=null; render(); }
+  function endDemo(toWizard){
+    state=demoReal; demoReal=null; weekRef=null; draft=null; ci=null;
+    if(toWizard){ state.view='wizard'; persistLocal(); }
+    else if(state.view==='wizard'||state.view==='intro') state.view=state.seen?'hoje':'wizard';
+    render();
+  }
+
+  /* ---------- tela geral ---------- */
+  function updateChrome(){
+    var v=state.view;
+    Array.prototype.forEach.call(tabbarIn.querySelectorAll('.tab'),function(b){
+      if(b.getAttribute('data-view')===v) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current');
+    });
+    tabbar.hidden=(v==='intro'||v==='wizard');
+    var mb=document.getElementById('mentbtn');
+    if(mb) mb.hidden=!cloud.owner;
+    var md=document.getElementById('mentdot');
+    if(md){
+      var n=sharedList.filter(function(c){return (c.data.activityAt||0)>seenBefore;}).length;
+      md.hidden=!(cloud.owner&&n>0);
+      md.textContent=n>0?String(n):'';
+    }
+  }
+  function shareText(){ return ''; }
+  function updateStatus(){
+    var txt;
+    if(demoReal) txt='Exemplo. Nada é salvo.';
+    else if(cloud.ok) txt='Salvo na sua conta e neste aparelho';
+    else if(storageOk) txt='Salvo neste aparelho';
+    else txt='Sem salvamento automático. Copie o plano ao final.';
+    statusEl.textContent=txt;
+    Array.prototype.forEach.call(document.querySelectorAll('.sharestat'),function(el){ el.textContent=shareText(); });
+  }
+  function renderWizard(){
+    var st=STEPS[state.step];
+    var html='<div class="wiz-top"><button type="button" class="btn-text" data-act="view" data-view="hoje">Sair das perguntas</button></div>'+progressHTML();
+    if(st.kind==='welcome') html+=welcomeHTML();
+    else if(st.kind==='pause') html+=pauseHTML(st);
+    else html+=questionHTML(st);
+    main.innerHTML=html;
+  }
+  function render(opts){
+    opts=opts||{};
+    var y=window.pageYOffset||0, keepVals=null;
+    if(opts.keep){
+      keepVals={};
+      Array.prototype.forEach.call(main.querySelectorAll('[data-keep]'),function(el){ if(el.id) keepVals[el.id]=el.value; });
+    }
+    updateChrome();
+    var v=state.view;
+    if(v==='intro') renderIntro();
+    else if(v==='como') renderComo();
+    else if(v==='wizard') renderWizard();
+    else if(v==='semana') renderSemana();
+    else if(v==='diario') renderDiario();
+    else if(v==='progresso') renderProgresso();
+    else if(v==='plano') renderPlano();
+    else if(v==='porque') renderPorque();
+    else if(v==='mentora') renderMentora();
+    else renderHoje();
+    if(keepVals){
+      Object.keys(keepVals).forEach(function(id){
+        var el=document.getElementById(id);
+        if(el&&(el.tagName==='SELECT'||!el.value)) el.value=keepVals[id];
+      });
+    }
+    updateStatus();
+    if(opts.keep){
+      window.scrollTo(0,y);
+      if(opts.focus){ var f=document.getElementById(opts.focus); if(f){ try{ f.focus({preventScroll:true}); }catch(e){} } }
+    } else {
+      var h=main.querySelector('h1');
+      if(h){ try{ h.focus({preventScroll:true}); }catch(e){} }
+      window.scrollTo(0,0);
+    }
+  }
+
+  /* ---------- ações ---------- */
+  function go(i){
+    state.step=Math.max(0,Math.min(STEPS.length-1,i));
+    state.view='wizard';
+    persistLocal(); render();
+  }
+  function goToId(id){
+    var i=STEPS.findIndex(function(s){return s.id===id;});
+    if(i>=0) go(i);
+  }
+  function next(){
+    if(state.step>=STEPS.length-1){
+      justFinished=true; state.view='plano'; state.seen=true; state.lastShareAt=Date.now();
+      save(); render();
+    } else go(state.step+1);
+  }
+  function setView(v){
+    if(demoReal&&v==='wizard'){ endDemo(true); return; }
+    if(v==='semana') weekRef=mondayOf(today0());
+    if(v==='mentora'){ seenBefore=Date.now(); try{ localStorage.setItem(SEEN_KEY,String(seenBefore)); }catch(e){} }
+    state.view=v;
+    persistLocal(); render();
+  }
+  function toggleDay(b){
+    var path=b.getAttribute('data-path'), d=Number(b.getAttribute('data-val'));
+    var arr=getP(path); if(!Array.isArray(arr)) arr=[];
+    var k=arr.indexOf(d);
+    if(k>=0) arr.splice(k,1); else arr.push(d);
+    arr.sort(function(a,c){return a-c;});
+    setP(path,arr);
+    b.setAttribute('aria-pressed',String(k<0));
+    saveSoon(); refreshExtra();
+  }
+  function setFolga(b){
+    setP(b.getAttribute('data-path'),Number(b.getAttribute('data-val')));
+    Array.prototype.forEach.call(b.parentNode.querySelectorAll('.chip'),function(c){ c.setAttribute('aria-pressed',String(c===b)); });
+    saveSoon(); refreshExtra();
+  }
+  function refreshExtra(){
+    if(state.view!=='wizard'||demoReal) return;
+    var st=STEPS[state.step], box=document.getElementById('extra');
+    if(st&&st.extra&&box) box.innerHTML=extraHTML(st);
+  }
+  function addTask(date){
+    var inp=document.getElementById('add-'+date); if(!inp) return;
+    var v=inp.value.trim();
+    if(!v){ inp.focus(); return; }
+    var sel=document.getElementById('addm-'+date), m=sel?(Number(sel.value)||0):0;
+    if(!state.tasks[date]) state.tasks[date]=[];
+    state.tasks[date].push({id:uid(),t:v.slice(0,160),m:m,d:false});
+    inp.value='';
+    save(); render({keep:true,focus:'add-'+date});
+  }
+  function toggleTask(date,id){
+    var ts=state.tasks[date]||[];
+    ts.forEach(function(t){
+      if(t.id===id){
+        t.d=!t.d;
+        if(t.d){ state.lastShareAt=Date.now(); toast(praise()); }
+      }
+    });
+    save(); render({keep:true});
+  }
+  function delTask(date,id){
+    state.tasks[date]=(state.tasks[date]||[]).filter(function(t){return t.id!==id;});
+    save(); render({keep:true});
+  }
+  function addHard(){
+    var inp=document.getElementById('add-hard'); if(!inp) return;
+    var v=inp.value.trim();
+    if(!v){ inp.focus(); return; }
+    state.hard.passos.push(v.slice(0,160));
+    inp.value='';
+    save(); render({keep:true,focus:'add-hard'});
+  }
+  function toggleMin(){
+    var iso=isoOf(today0());
+    state.minDone[iso]=!state.minDone[iso];
+    if(state.minDone[iso]){ state.lastShareAt=Date.now(); toast('Isso conta. Um passo pequeno também é um passo.'); }
+    save(); render({keep:true});
+  }
+  function useMin(){
+    var iso=isoOf(today0()), v=(state.hard.minimo||'').trim();
+    if(!v) return;
+    if(!state.tasks[iso]) state.tasks[iso]=[];
+    var has=state.tasks[iso].some(function(t){return t.t===v;});
+    if(!has) state.tasks[iso].push({id:uid(),t:v,m:0,d:false});
+    save(); toast('Colocado nos passos de hoje.'); render({keep:true});
+  }
+  function saveDiary(){
+    if(!draft) return;
+    var any=(draft.a||'').trim()||(draft.b||'').trim()||(draft.c||'').trim()||draft.humor;
+    if(!any){ toast('Escreva algo ou escolha como você está.'); return; }
+    var e=null;
+    state.diary.forEach(function(x){ if(draft.id&&x.id===draft.id) e=x; });
+    if(!e) state.diary.forEach(function(x){ if(x.date===draft.date) e=x; });
+    if(!e){ e={id:uid()}; state.diary.push(e); }
+    e.date=draft.date; e.humor=draft.humor; e.a=draft.a; e.b=draft.b; e.c=draft.c; e.share=!!draft.share;
+    if(e.share) state.lastShareAt=Date.now();
+    state.diary.sort(function(x,y){return x.date<y.date?-1:(x.date>y.date?1:0);});
+    draft=draftFrom(e);
+    save(); toast('Anotação salva.'); render({keep:true});
+  }
+  function saveCheckin(){
+    if(!ci) return;
+    var mon=isoOf(mondayOf(today0())), ws=weekStats(mon);
+    var item={id:uid(),at:new Date().toISOString(),week:mon,pcts:[ci.pcts[0]||0,ci.pcts[1]||0],humor:ci.humor||'',funcionou:(ci.funcionou||'').trim(),ajustar:(ci.ajustar||'').trim(),feitas:ws.done,total:ws.total};
+    state.checkins.push(item);
+    state.marcos[0].pct=item.pcts[0];
+    state.marcos[1].pct=item.pcts[1];
+    state.lastShareAt=Date.now();
+    ci=null; ciDone=true;
+    save(); toast('Progresso registrado.'); render();
+  }
+  function doCopy(){
+    var txt=planText();
+    var msg=document.getElementById('copymsg'), box=document.getElementById('copybox'), ta=document.getElementById('copytext');
+    if(!msg||!box||!ta) return;
+    ta.value=txt;
+    function fallback(){
+      box.hidden=false; ta.focus(); ta.select();
+      msg.textContent='Não consegui copiar sozinha. Selecione o texto abaixo e copie.';
+    }
+    try{
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(function(){ msg.textContent='Plano copiado. Cole em uma nota ou mensagem para guardar.'; }).catch(fallback);
+      } else fallback();
+    }catch(e){ fallback(); }
+  }
+  var MENTORA_WHATSAPP=''; /* opcional: número da mentora com DDI e DDD, só dígitos. Ex.: 5511999999999 */
+  function sendSumHTML(){
+    return '<section class="card" style="margin-top:14px"><h2 class="h2">Enviar resumo para a minha mentora</h2>'+
+      '<p class="muted small" style="margin:0 0 12px">O app monta uma mensagem curta com o seu progresso. Você confere, edita se quiser e manda pelo WhatsApp. Nada é enviado sozinho.</p>'+
+      '<button type="button" class="btn btn-primary" data-act="sendsum">Enviar resumo para a minha mentora</button><div id="sumbox" aria-live="polite"></div></section>';
+  }
+  function summaryText(){
+    var t=today0(), mon=isoOf(mondayOf(t)), ws=weekStats(mon), nm=(state.nome||'').trim();
+    var L=['Resumo da semana'+(nm?' - '+nm:'')+' ('+fmtDM(t)+')',''];
+    var ob=(state.concurso||'').trim();
+    if(ob) L.push('Meu objetivo: '+ob,'');
+    state.marcos.forEach(function(mk,i){
+      var nome=(mk.nome||'').trim(), c=calcMarco(i);
+      if(!nome&&!mk.prazo&&!mk.pct) return;
+      L.push('Marco '+(i+1)+(nome?' ('+nome+')':'')+': '+(mk.pct||0)+'% pronto'+((c&&c.valid)?'. Meta interna '+fmtLong(c.internal)+', prazo '+fmtLong(c.prazo):''));
+    });
+    L.push('','Passos feitos nesta semana: '+ws.done+' de '+ws.total,'Dias com passos nos últimos 14: '+activeCount(14)+' de 14');
+    var mood=state.mood[isoOf(t)];
+    if(mood) L.push('Como estou hoje: '+moodLabel(mood));
+    var last=state.checkins.length?state.checkins[state.checkins.length-1]:null;
+    if(last){
+      if(last.humor) L.push('Como me senti na semana: '+moodLabel(last.humor));
+      if((last.funcionou||'').trim()) L.push('O que funcionou: '+last.funcionou.trim());
+      if((last.ajustar||'').trim()) L.push('O que vou ajustar: '+last.ajustar.trim());
+    }
+    var since=isoOf(addDays(t,-7));
+    var ds=state.diary.filter(function(e){return e.share&&e.date>=since;});
+    if(ds.length){
+      L.push('','Anotações do diário que quero compartilhar:');
+      ds.forEach(function(e){
+        var d=parseISO(e.date), parts=[e.a,e.b,e.c].filter(function(x){return (x||'').trim();}).map(function(x){return x.trim();});
+        L.push('- '+(d?fmtDM(d):e.date)+(e.humor?' ('+moodLabel(e.humor)+')':'')+': '+parts.join(' / '));
+      });
+    }
+    return L.join('\n');
+  }
+  function waLink(txt){
+    var n=String(MENTORA_WHATSAPP).replace(/\D/g,'');
+    return 'https://wa.me/'+n+'?text='+encodeURIComponent(txt);
+  }
+  function showSummary(){
+    var box=document.getElementById('sumbox'); if(!box) return;
+    var txt=summaryText();
+    box.innerHTML='<div class="info"><p><strong>Confira antes de enviar.</strong> Você pode editar o texto abaixo.</p>'+
+      '<textarea id="sumtext" rows="12" aria-label="Resumo para a minha mentora"></textarea>'+
+      '<div class="actions" style="margin-top:12px"><button type="button" class="btn btn-ghost" data-act="copysum">Copiar texto</button>'+
+      '<a class="btn btn-primary" id="sumlink" target="_blank" rel="noopener" href="'+esc(waLink(txt))+'">Abrir no WhatsApp</a>'+
+      '<span id="summsg" class="muted small" role="status"></span></div></div>';
+    document.getElementById('sumtext').value=txt;
+  }
+  function copySummary(){
+    var ta=document.getElementById('sumtext'), msg=document.getElementById('summsg');
+    if(!ta||!msg) return;
+    function fb(){ ta.focus(); ta.select(); msg.textContent='Não consegui copiar sozinha. Selecione o texto e copie.'; }
+    try{
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(ta.value).then(function(){ msg.textContent='Texto copiado. Cole na conversa com a sua mentora.'; }).catch(fb);
+      } else fb();
+    }catch(e){ fb(); }
+  }
+  function resetAll(){
+    clearTimeout(saveTimer); clearTimeout(cloudTimer);
+    state=blank();
+    try{ localStorage.removeItem(KEY); }catch(e){}
+    state.updatedAt=Date.now();
+    draft=null; ci=null; introIdx=0; weekRef=null;
+    if(cloud.doc){ cloud.doc.set({state:clone(state),updatedAt:state.updatedAt}).catch(function(){}); }
+    if(cloud.sharedDoc){ cloud.sharedDoc.delete().catch(function(){}); }
+    render();
+  }
+
+  document.addEventListener('click',function(e){
+    var b=e.target.closest?e.target.closest('[data-act]'):null;
+    if(!b) return;
+    var act=b.getAttribute('data-act'), date=b.getAttribute('data-date'), id=b.getAttribute('data-id'), val=b.getAttribute('data-val');
+    if(act==='view') setView(b.getAttribute('data-view'));
+    else if(act==='next'||act==='skip') next();
+    else if(act==='prev') go(state.step-1);
+    else if(act==='stop') setView('plano');
+    else if(act==='edit') goToId(b.getAttribute('data-step'));
+    else if(act==='day') toggleDay(b);
+    else if(act==='folga') setFolga(b);
+    else if(act==='copy') doCopy();
+    else if(act==='sendsum') showSummary();
+    else if(act==='copysum') copySummary();
+    else if(act==='demo') startDemo();
+    else if(act==='exit-demo') endDemo(false);
+    else if(act==='intro-next'){
+      if(introIdx>=HOW.length-1){ state.seen=true; introIdx=0; state.step=0; state.view='wizard'; persistLocal(); render(); }
+      else { introIdx++; render(); }
+    }
+    else if(act==='intro-prev'){ introIdx=Math.max(0,introIdx-1); render(); }
+    else if(act==='intro-skip'){ state.seen=true; introIdx=0; state.step=0; state.view='wizard'; persistLocal(); render(); }
+    else if(act==='mood'){ state.mood[isoOf(today0())]=val; save(); render({keep:true}); }
+    else if(act==='toggle') toggleTask(date,id);
+    else if(act==='deltask') delTask(date,id);
+    else if(act==='addtask') addTask(date);
+    else if(act==='addhard') addHard();
+    else if(act==='delhard'){ state.hard.passos.splice(Number(b.getAttribute('data-idx')),1); save(); render({keep:true}); }
+    else if(act==='minfeito') toggleMin();
+    else if(act==='usemin') useMin();
+    else if(act==='wk-prev'){ weekRef=addDays(weekRef||mondayOf(today0()),-7); render(); }
+    else if(act==='wk-next'){ weekRef=addDays(weekRef||mondayOf(today0()),7); render(); }
+    else if(act==='wk-now'){ weekRef=mondayOf(today0()); render(); }
+    else if(act==='dmood'){ if(draft){ draft.humor=(draft.humor===val)?'':val; } render({keep:true}); }
+    else if(act==='dsave') saveDiary();
+    else if(act==='dedit'){
+      state.diary.forEach(function(x){ if(x.id===id) draft=draftFrom(x); });
+      render();
+    }
+    else if(act==='ddel'){ confirmDel=id; render({keep:true}); }
+    else if(act==='ddel-no'){ confirmDel=null; render({keep:true}); }
+    else if(act==='ddel-yes'){
+      state.diary=state.diary.filter(function(x){return x.id!==id;});
+      if(draft&&draft.id===id) draft=newDraft(draft.date);
+      confirmDel=null; save(); render({keep:true});
+    }
+    else if(act==='cimood'){ if(ci){ ci.humor=(ci.humor===val)?'':val; } render({keep:true}); }
+    else if(act==='cisave') saveCheckin();
+    else if(act==='share-toggle'){ state.shareOn=!!b.checked; save(); updateStatus(); }
+    else if(act==='reset-ask'){
+      var area=document.getElementById('reset-area');
+      if(area) area.innerHTML='<p>Isso apaga todas as suas respostas, passos e anotações. Deseja continuar?</p><div class="actions" style="margin-top:0"><button type="button" class="btn btn-danger" data-act="reset-yes">Apagar tudo</button><button type="button" class="btn btn-ghost" data-act="reset-no">Cancelar</button></div>';
+    }
+    else if(act==='reset-yes') resetAll();
+    else if(act==='reset-no') render();
+  });
+  function onInput(e){
+    var t=e.target;
+    if(!t||!t.getAttribute) return;
+    if(t.id==='sumtext'){ var lk=document.getElementById('sumlink'); if(lk) lk.href=waLink(t.value); return; }
+    var path=t.getAttribute('data-path');
+    if(path&&!t.getAttribute('data-act')){ setP(path,t.value); saveSoon(); refreshExtra(); return; }
+    var wk=t.getAttribute('data-wk');
+    if(wk){ weekData(isoOf(weekRef||mondayOf(today0())))[wk]=t.value; saveSoon(); return; }
+    var dr=t.getAttribute('data-draft');
+    if(dr&&draft){
+      if(dr==='date'){
+        if(e.type==='change'&&t.value){ draft=newDraft(t.value); render({keep:true}); }
+        return;
+      }
+      if(dr==='share') draft.share=!!t.checked; else draft[dr]=t.value;
+      return;
+    }
+    var ck=t.getAttribute('data-ci');
+    if(ck&&ci){
+      if(ck.indexOf('pct')===0){
+        var i=Number(ck.slice(3)); ci.pcts[i]=Number(t.value);
+        var o=document.getElementById('pct-out-'+i); if(o) o.textContent=t.value+'%';
+      } else ci[ck]=t.value;
+    }
+  }
+  document.addEventListener('input',onInput);
+  document.addEventListener('change',onInput);
+  document.addEventListener('keydown',function(e){
+    if(e.key!=='Enter') return;
+    var t=e.target;
+    if(!t||t.tagName!=='INPUT') return;
+    var tid=t.id||'';
+    if(tid==='add-hard'){ e.preventDefault(); addHard(); return; }
+    if(tid.indexOf('add-')===0){ e.preventDefault(); addTask(tid.slice(4)); return; }
+    if(state.view==='wizard'){
+      var btn=main.querySelector('[data-act="next"]');
+      if(btn){ e.preventDefault(); btn.click(); }
+    }
+  });
+
+  tabbarIn.innerHTML=TABS.map(function(t){
+    return '<button type="button" class="tab" data-act="view" data-view="'+t[0]+'"><svg viewBox="0 0 24 24" aria-hidden="true">'+ICONS[t[0]]+'</svg><span>'+t[1]+'</span></button>';
+  }).join('');
+
+  load();
+  fixState();
+  render();
+})();
+</script>
+</body></html>
