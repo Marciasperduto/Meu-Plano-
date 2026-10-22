@@ -375,7 +375,7 @@
       }),
       semana:{feitas:ws.done,total:ws.total}, dias14:activeCount(14),
       checkins:state.checkins.slice(-12),
-      diario:state.diary.filter(function(e){return e.share;}).slice(-12).map(function(e){return {date:e.date,humor:e.humor||'',a:e.a||'',b:e.b||'',c:e.c||''};}),
+      diario:state.diary.filter(function(e){return e.share;}).slice(-12).map(function(e){return {date:e.date,humor:e.humor||'',a:e.a||'',b:e.b||'',c:e.c||'',d:e.d||'',e:e.e||''};}),
       activityAt:state.lastShareAt||0, updatedAt:Date.now()
     };
   }
@@ -942,11 +942,11 @@
   }
 
   /* ---------- telas: diário ---------- */
-  function draftFrom(e){ return {id:e.id,date:e.date,humor:e.humor||'',a:e.a||'',b:e.b||'',c:e.c||'',share:!!e.share}; }
+  function draftFrom(e){ return {id:e.id,date:e.date,humor:e.humor||'',a:e.a||'',b:e.b||'',c:e.c||'',d:e.d||'',e:e.e||'',share:!!e.share}; }
   function newDraft(date){
     var found=null;
     state.diary.forEach(function(e){ if(e.date===date) found=e; });
-    return found?draftFrom(found):{id:null,date:date,humor:'',a:'',b:'',c:'',share:false};
+    return found?draftFrom(found):{id:null,date:date,humor:'',a:'',b:'',c:'',d:'',e:'',share:false};
   }
   function renderDiario(){
     if(!draft) draft=newDraft(isoOf(today0()));
@@ -958,6 +958,8 @@
       '<div class="field"><label class="lbl" for="d-a">Como foi o meu dia?</label><textarea id="d-a" data-draft="a" rows="3" placeholder="Conte do seu jeito, pode ser bem curtinho.">'+esc(draft.a)+'</textarea></div>'+
       '<div class="field"><label class="lbl" for="d-b">O que eu fiz pelo meu objetivo hoje?</label><textarea id="d-b" data-draft="b" rows="3" placeholder="Mesmo um passo pequeno conta.">'+esc(draft.b)+'</textarea></div>'+
       '<div class="field"><label class="lbl" for="d-c">Uma coisa boa que aconteceu</label><textarea id="d-c" data-draft="c" rows="3" placeholder="Pode ser qualquer coisa, até pequena.">'+esc(draft.c)+'</textarea></div>'+
+      '<div class="field"><label class="lbl" for="d-d">Se eu pudesse deixar uma preocupação no papel e ir descansar, qual seria?</label><textarea id="d-d" data-draft="d" rows="3" placeholder="Escreva aqui e deixe no papel. Amanhã você olha de novo.">'+esc(draft.d)+'</textarea></div>'+
+      '<div class="field"><label class="lbl" for="d-e">O que me deu energia hoje? O que me tirou energia?</label><textarea id="d-e" data-draft="e" rows="3" placeholder="Pessoas, lugares, tarefas, horários, pensamentos...">'+esc(draft.e)+'</textarea></div>'+
       '<label class="check-row"><input type="checkbox" id="d-share" data-draft="share"'+(draft.share?' checked':'')+'><span>Incluir esta anotação no resumo para a minha mentora</span></label>'+
       '<p class="muted small" style="margin:8px 0 0">Se você não marcar, esta anotação é só sua e não aparece no resumo.</p>'+
       '<div class="actions"><button type="button" class="btn btn-primary" data-act="dsave">Salvar anotação</button>'+(draft.id?'<span class="muted small">Editando a anotação de '+esc(fmtDM(dd))+'</span>':'')+'</div></section>';
@@ -967,6 +969,8 @@
       if((e.a||'').trim()) parts+='<span class="q">Como foi o dia</span><p>'+esc(e.a)+'</p>';
       if((e.b||'').trim()) parts+='<span class="q">O que fiz pelo meu objetivo</span><p>'+esc(e.b)+'</p>';
       if((e.c||'').trim()) parts+='<span class="q">Uma coisa boa</span><p>'+esc(e.c)+'</p>';
+      if((e.d||'').trim()) parts+='<span class="q">Preocupação que deixei no papel</span><p>'+esc(e.d)+'</p>';
+      if((e.e||'').trim()) parts+='<span class="q">O que me deu e me tirou energia</span><p>'+esc(e.e)+'</p>';
       return '<article class="entry"><div class="entry-h"><strong>'+esc(d?DAYS_LONG[(d.getDay()+6)%7]+', '+fmtDM(d):e.date)+'</strong><span>'+
         (e.humor?'<span class="tag">'+esc(moodLabel(e.humor))+'</span>':'')+(e.share?'<span class="tag shared">Compartilhada</span>':'')+'</span></div>'+parts+
         '<div class="entry-actions">'+(conf?
@@ -1193,7 +1197,7 @@
     var dia=(d.diario||[]).slice().reverse().map(function(e){
       var ed=parseISO(e.date||'');
       return '<div class="entry"><div class="entry-h"><strong>'+esc(ed?fmtDM(ed):e.date||'')+'</strong>'+(e.humor?'<span class="tag">'+esc(moodLabel(e.humor))+'</span>':'')+'</div>'+
-        ((e.a||'').trim()?'<p>'+esc(e.a)+'</p>':'')+((e.b||'').trim()?'<p>'+esc(e.b)+'</p>':'')+((e.c||'').trim()?'<p>'+esc(e.c)+'</p>':'')+'</div>';
+        ((e.a||'').trim()?'<p>'+esc(e.a)+'</p>':'')+((e.b||'').trim()?'<p>'+esc(e.b)+'</p>':'')+((e.c||'').trim()?'<p>'+esc(e.c)+'</p>':'')+((e.d||'').trim()?'<p>'+esc(e.d)+'</p>':'')+((e.e||'').trim()?'<p>'+esc(e.e)+'</p>':'')+'</div>';
     }).join('');
     return '<article class="client"><div class="client-h"><h3>'+esc(nm)+'</h3><span>'+(isNew?'<span class="tag now">Novidade</span>':'')+'<span class="muted small"> '+(d.activityAt?'Última atividade '+ago(d.activityAt):'Sem atividade ainda')+'</span></span></div>'+
       '<p style="margin:0 0 12px"><strong>Objetivo:</strong> '+(d.objetivo?esc(d.objetivo):'<span class="muted">ainda em branco</span>')+'</p>'+marcos+
@@ -1229,7 +1233,7 @@
     s.mood[isoOf(t)]='tranquila';
     s.checkins=[{id:'c1',at:addDays(t,-7).toISOString(),week:isoOf(mondayOf(addDays(t,-7))),pcts:[15,0],humor:'ansiosa',funcionou:'Estudar logo cedo me ajudou.',ajustar:'Vou reduzir para dois passos por dia.',feitas:4,total:6},
       {id:'c2',at:addDays(t,-1).toISOString(),week:isoOf(mon),pcts:[25,0],humor:'tranquila',funcionou:'Ter um passo mínimo me tirou do zero.',ajustar:'Marcar o horário no celular.',feitas:3,total:4}];
-    s.diary=[{id:'d1',date:isoOf(addDays(t,-1)),humor:'cansada',a:'Dia puxado no trabalho.',b:'Fiz só a revisão rápida.',c:'Tomei café com calma.',share:true}];
+    s.diary=[{id:'d1',date:isoOf(addDays(t,-1)),humor:'cansada',a:'Dia puxado no trabalho.',b:'Fiz só a revisão rápida.',c:'Tomei café com calma.',d:'Medo de não dar tempo de estudar tudo.',e:'Deu energia: caminhar de manhã. Tirou: reunião longa.',share:true}];
     s.conquistas=[{id:'q1',tipo:'marco',titulo:'Organização do estudo',objetivo:'Analista Judiciário em um Tribunal (exemplo)',medida:'Cronograma montado e 2 semanas seguidas cumpridas.',data:isoOf(addDays(t,-20)),sentimento:'Orgulhosa de ter criado uma rotina que eu consigo manter.'}];
     s.revMes=[{id:'r1',at:addDays(t,-25).toISOString(),mes:mesKey(addDays(t,-25)),r1:'Terminei duas matérias e fiz 5 simulados.',r2:'Marco 1.',r3:'Eu rendo mais de manhã.',r4:'Nenhum.',r5:'Só continuar.',r6:'Fechar a terceira matéria.'}];
     s.seen=true; s.view='hoje';
@@ -1406,13 +1410,13 @@
   }
   function saveDiary(){
     if(!draft) return;
-    var any=(draft.a||'').trim()||(draft.b||'').trim()||(draft.c||'').trim()||draft.humor;
+    var any=(draft.a||'').trim()||(draft.b||'').trim()||(draft.c||'').trim()||(draft.d||'').trim()||(draft.e||'').trim()||draft.humor;
     if(!any){ toast('Escreva algo ou escolha como você está.'); return; }
     var e=null;
     state.diary.forEach(function(x){ if(draft.id&&x.id===draft.id) e=x; });
     if(!e) state.diary.forEach(function(x){ if(x.date===draft.date) e=x; });
     if(!e){ e={id:uid()}; state.diary.push(e); }
-    e.date=draft.date; e.humor=draft.humor; e.a=draft.a; e.b=draft.b; e.c=draft.c; e.share=!!draft.share;
+    e.date=draft.date; e.humor=draft.humor; e.a=draft.a; e.b=draft.b; e.c=draft.c; e.d=draft.d; e.e=draft.e; e.share=!!draft.share;
     if(e.share) state.lastShareAt=Date.now();
     state.diary.sort(function(x,y){return x.date<y.date?-1:(x.date>y.date?1:0);});
     draft=draftFrom(e);
@@ -1654,7 +1658,7 @@
     if(ds.length){
       L.push('','Anotações do diário que quero compartilhar:');
       ds.forEach(function(e){
-        var d=parseISO(e.date), parts=[e.a,e.b,e.c].filter(function(x){return (x||'').trim();}).map(function(x){return x.trim();});
+        var d=parseISO(e.date), parts=[e.a,e.b,e.c,e.d,e.e].filter(function(x){return (x||'').trim();}).map(function(x){return x.trim();});
         L.push('- '+(d?fmtDM(d):e.date)+(e.humor?' ('+moodLabel(e.humor)+')':'')+': '+parts.join(' / '));
       });
     }
