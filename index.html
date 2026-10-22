@@ -256,6 +256,19 @@
   #copytext{margin-top:12px;min-height:200px}
   .foot{margin:22px 0 0;font-size:.85rem;color:var(--ink-soft)}
   @media (prefers-reduced-motion: reduce){*{transition:none!important}}
+  .daynote{margin:8px 0 0;font-size:.95rem;color:var(--ink)}
+  .pill-tour{background:var(--pink-soft);border-color:var(--pink);color:var(--pink-ink)}
+  .tour{position:fixed;z-index:25;left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));
+    bottom:calc(84px + env(safe-area-inset-bottom,0px));max-width:520px;margin:0 auto;background:var(--surface);border:2px solid var(--pink);
+    border-radius:20px;padding:16px 18px;box-shadow:0 10px 30px rgba(45,54,80,.22)}
+  .tour[hidden]{display:none}
+  .tour .kicker{margin:0 0 4px}
+  .tour h2{font-family:var(--font-display);font-weight:600;font-size:1.2rem;margin:0 0 6px}
+  .tour p.t{margin:0 0 12px;color:var(--ink)}
+  .tour .tour-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .tour .spacer{flex:1}
+  body.tour-on main{padding-bottom:250px}
+  .tab.tour-hl{outline:3px solid var(--pink-ink);outline-offset:-3px;background:var(--pink-soft);color:var(--pink-ink)}
 </style>
 </head><body>
 <div class="app">
@@ -268,11 +281,13 @@
   </header>
   <div class="hdr-actions">
     <button type="button" class="pill" data-act="view" data-view="como">Como funciona</button>
+    <button type="button" class="pill pill-tour" data-act="tour-start">Passo a passo</button>
   </div>
   <main id="main"></main>
 </div>
 <nav class="tabbar" id="tabbar" aria-label="Seções do app" hidden><div class="tabbar-in" id="tabbar-in"></div></nav>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="tour" id="tour" role="dialog" aria-label="Passo a passo do app" hidden></div>
 
 <script>
 (function(){
@@ -582,7 +597,7 @@
      defs:[['O que é um marco?','É um ponto de chegada no meio do caminho. Por exemplo: terminar a primeira parte do conteúdo.'],['O que é folga?','É um tempo extra que a gente reserva de propósito. Se tudo der certo, você chega antes. Se vier um dia ruim, você não fica para trás.']]},
     {title:'Depois, você usa no dia a dia',
      body:['Na barra de baixo ficam as partes que você vai usar sempre:'],
-     list:[['Hoje','os passos pequenos do dia e como você está se sentindo.'],['Semana','organize os dias, escolha o seu primeiro passo e deixe passos prontos para os dias difíceis.'],['Diário','escreva como foi o seu dia, do jeito que quiser.'],['Progresso','conte o quanto você avançou em cada marco.'],['Meu plano','tudo o que você escreveu, num lugar só.']]},
+     list:[['Hoje','o planejamento do dia, melhor de manhã: escolha três passos e veja o que importa.'],['Semana','organize os dias, escolha o seu primeiro passo e deixe passos prontos para os dias difíceis.'],['Diário','o fechamento do dia, melhor à noite: escreva como foi o seu dia, do jeito que quiser.'],['Progresso','conte o quanto você avançou em cada marco.'],['Meu plano','tudo o que você escreveu, num lugar só.']]},
     {title:'Quem vê o quê',
      body:['Sua mentora acompanha a sua evolução pelo que você enviar a ela. Quando quiser, use o botão Enviar resumo para a minha mentora: ele monta uma mensagem curta e você manda pelo WhatsApp.','Nada é enviado sozinho. O diário é só seu, e só entra no resumo a anotação que você marcar.']},
     {title:'E nos dias difíceis?',
@@ -893,7 +908,7 @@
     }
     main.innerHTML=demoBanner()+
       '<section class="hero" style="gap:10px"><div><p class="kicker">'+esc(DAYS_LONG[(t.getDay()+6)%7]+', '+fmtDM(t))+'</p>'+
-      '<h1 class="h-title" tabindex="-1" style="margin:0">'+greet+(nm?', '+esc(nm):'')+'</h1></div><p class="quote">'+esc(fraseDoDia())+'</p></section>'+
+      '<h1 class="h-title" tabindex="-1" style="margin:0">'+greet+(nm?', '+esc(nm):'')+'</h1><p class="daynote"><b>Planejamento do dia.</b> Melhor de manhã: escolha três passos e veja o que importa hoje.</p></div><p class="quote">'+esc(fraseDoDia())+'</p></section>'+
       '<section class="card" style="margin-top:14px"><h2 class="h2">Como você está hoje?</h2>'+moodChipsHTML('mood',state.mood[iso]||'')+'</section>'+rem+
       '<section class="card"><h2 class="h2">Meus passos de hoje</h2>'+
       '<p class="muted small" style="margin:0 0 12px">Escolha poucos passos, pequenos e possíveis. Três já é bastante.</p>'+taskBlockHTML(iso)+'</section>'+
@@ -952,6 +967,7 @@
     if(!draft) draft=newDraft(isoOf(today0()));
     var dd=parseISO(draft.date)||today0();
     var form='<section class="card"><p class="kicker">Meu diário</p><h1 class="h-title" tabindex="-1">Como foi o seu dia?</h1>'+
+      '<p class="help" style="margin-bottom:8px"><b>Fechamento do dia.</b> Melhor à noite: escreva como foi o dia antes de descansar.</p>'+
       '<p class="help">Escreva do seu jeito. Pode ser curto. Ninguém precisa ler, a não ser que você queira.</p>'+
       '<div class="field"><label class="lbl" for="d-date">Dia</label><input type="date" id="d-date" data-draft="date" value="'+esc(draft.date)+'"></div>'+
       '<div class="field"><div class="lbl">Como você está?</div>'+moodChipsHTML('dmood',draft.humor)+'</div>'+
@@ -1342,6 +1358,40 @@
     state.view=v;
     persistLocal(); render();
   }
+  /* ---------- passo a passo (tour) ---------- */
+  var TOUR=[
+    {view:'hoje',tab:'hoje',title:'Hoje: planejamento do dia',text:'Melhor de manhã. Escolha três passos pequenos, veja o que importa hoje e marque como você está. Se o dia estiver difícil, use o passo mínimo.'},
+    {view:'semana',tab:'semana',title:'Semana',text:'Organize os 7 dias, escreva o primeiro passo da semana e deixe passos prontos para os dias difíceis.'},
+    {view:'diario',tab:'diario',title:'Diário: fechamento do dia',text:'Melhor à noite, antes de descansar. São 5 perguntas, e você responde do seu jeito. Só vai para a sua mentora a anotação que você marcar.'},
+    {view:'progresso',tab:'progresso',title:'Progresso',text:'Uma vez por semana, conte quanto de cada marco já está pronto. É aqui também que você monta o resumo para a sua mentora e envia pelo WhatsApp.'},
+    {view:'plano',tab:'plano',title:'Meu plano',text:'Tudo o que você escreveu, num lugar só. Dá para editar qualquer resposta, concluir marcos e copiar o plano em texto, que é a sua cópia de segurança.'},
+    {view:'porque',tab:'',title:'Para os dias difíceis',text:'No Hoje, o botão Relembrar meu porquê mostra o seu sonho e o menor passo que ainda conta. Atrasar não é fracassar. Manhã no Hoje, noite no Diário, um passo pequeno por dia.'}
+  ];
+  var tourIdx=null;
+  var tourEl=document.getElementById('tour');
+  function tourShow(i){
+    tourIdx=Math.max(0,Math.min(TOUR.length-1,i));
+    var st=TOUR[tourIdx], last=tourIdx===TOUR.length-1;
+    setView(st.view);
+    document.body.classList.add('tour-on');
+    Array.prototype.forEach.call(tabbarIn.querySelectorAll('.tab'),function(b){
+      if(st.tab&&b.getAttribute('data-view')===st.tab) b.classList.add('tour-hl'); else b.classList.remove('tour-hl');
+    });
+    tourEl.innerHTML='<p class="kicker">Passo a passo · '+(tourIdx+1)+' de '+TOUR.length+'</p><h2>'+esc(st.title)+'</h2><p class="t">'+esc(st.text)+'</p>'+
+      '<div class="tour-row">'+(tourIdx>0?'<button type="button" class="btn btn-ghost btn-sm" data-act="tour-prev">Voltar</button>':'')+'<span class="spacer"></span>'+
+      (last?'':'<button type="button" class="btn btn-text btn-sm" data-act="tour-close">Sair</button>')+
+      '<button type="button" class="btn btn-primary btn-sm" data-act="'+(last?'tour-close':'tour-next')+'">'+(last?'Entendi':'Próximo')+'</button></div>';
+    tourEl.hidden=false;
+    window.scrollTo(0,0);
+  }
+  function tourStart(){ tourShow(0); }
+  function tourClose(goHome){
+    tourIdx=null; tourEl.hidden=true; tourEl.innerHTML='';
+    document.body.classList.remove('tour-on');
+    Array.prototype.forEach.call(tabbarIn.querySelectorAll('.tab'),function(b){ b.classList.remove('tour-hl'); });
+    if(goHome) setView('hoje');
+  }
+
   function toggleDay(b){
     var path=b.getAttribute('data-path'), d=Number(b.getAttribute('data-val'));
     var arr=getP(path); if(!Array.isArray(arr)) arr=[];
@@ -1703,7 +1753,12 @@
     var b=e.target.closest?e.target.closest('[data-act]'):null;
     if(!b) return;
     var act=b.getAttribute('data-act'), date=b.getAttribute('data-date'), id=b.getAttribute('data-id'), val=b.getAttribute('data-val');
+    if(tourIdx!==null&&act==='view') tourClose(false);
     if(act==='view') setView(b.getAttribute('data-view'));
+    else if(act==='tour-start') tourStart();
+    else if(act==='tour-next') tourShow(tourIdx+1);
+    else if(act==='tour-prev') tourShow(tourIdx-1);
+    else if(act==='tour-close') tourClose(true);
     else if(act==='next'||act==='skip') next();
     else if(act==='prev') go(state.step-1);
     else if(act==='stop') setView('plano');
