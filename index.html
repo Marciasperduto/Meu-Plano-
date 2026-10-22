@@ -322,7 +322,7 @@
       passo:{oque:'',quando:'',como:''},
       hard:{acontece:'',freio:'',minimo:'',atraso:'',frase:'',apoio:'',passos:[]},
       weeks:{},tasks:{},diary:[],checkins:[],minDone:{},mood:{},conquistas:[],revMes:[],objFeito:false,objFeitoEm:'',
-      shareOn:true,seen:false,lastShareAt:0,
+      shareOn:true,seen:false,lastShareAt:0,lastBackupAt:0,
       view:'intro',step:0,updatedAt:0};
   }
 
@@ -894,6 +894,8 @@
       }
     }
     if(!demoReal&&(state.concurso||'').trim()){
+      var lb=state.lastBackupAt||0, doneBk=lb>=t.getTime(), isMon=t.getDay()===1, old=lb>0&&(Date.now()-lb)/DAY_MS>=8;
+      if(!doneBk&&(isMon||old)) rem+='<div class="remind"><span>'+(isMon?'Segunda-feira é dia da cópia de segurança. Salve o arquivo no seu Drive.':'Faz mais de uma semana desde a sua última cópia de segurança.')+'</span><button type="button" class="btn btn-primary btn-sm" data-act="bk-save">Salvar agora</button></div>';
       var dm=t.getDate(), ref=dm>=25?t:(dm<=3?new Date(t.getFullYear(),t.getMonth()-1,1):null);
       if(ref&&!state.revMes.some(function(r){return r.mes===mesKey(ref);})) rem+='<div class="remind"><span>Lembrete: hora da revisão de '+esc(mesNome(mesKey(ref)))+'.</span><button type="button" class="btn btn-primary btn-sm" data-act="view" data-view="mensal">Fazer agora</button></div>';
     }
@@ -1141,7 +1143,7 @@
       '<section class="section"><div class="sec-head"><h2>Minhas conquistas</h2></div>'+conqCardHTML()+'</section>'+
       passoHTML()+hardSectionHTML();
     if(!demoReal){
-      html+=''+sendSumHTML()+
+      html+=''+sendSumHTML()+bkCardHTML()+
         '<section class="section"><div class="actions" style="margin-top:0"><button type="button" class="btn btn-primary" data-act="edit" data-step="welcome">Refazer as perguntas</button><button type="button" class="btn btn-ghost" data-act="copy">Copiar plano em texto</button><span id="copymsg" class="muted small" role="status"></span></div>'+
         '<div id="copybox" hidden><textarea id="copytext" readonly rows="10" aria-label="Texto do plano"></textarea></div>'+
         '<div id="reset-area" class="reset"><button type="button" class="btn btn-text" data-act="reset-ask">Recomeçar do zero</button></div>'+
@@ -1364,7 +1366,7 @@
     {view:'semana',tab:'semana',title:'Semana',text:'Organize os 7 dias, escreva o primeiro passo da semana e deixe passos prontos para os dias difíceis.'},
     {view:'diario',tab:'diario',title:'Diário: fechamento do dia',text:'Melhor à noite, antes de descansar. São 5 perguntas, e você responde do seu jeito. Só vai para a sua mentora a anotação que você marcar.'},
     {view:'progresso',tab:'progresso',title:'Progresso',text:'Uma vez por semana, conte quanto de cada marco já está pronto. É aqui também que você monta o resumo para a sua mentora e envia pelo WhatsApp.'},
-    {view:'plano',tab:'plano',title:'Meu plano',text:'Tudo o que você escreveu, num lugar só. Dá para editar qualquer resposta, concluir marcos e copiar o plano em texto, que é a sua cópia de segurança.'},
+    {view:'plano',tab:'plano',title:'Meu plano',text:'Tudo o que você escreveu, num lugar só. Dá para editar qualquer resposta, concluir marcos e salvar uma cópia de segurança no Drive, de preferência toda segunda-feira.'},
     {view:'porque',tab:'',title:'Para os dias difíceis',text:'No Hoje, o botão Relembrar meu porquê mostra o seu sonho e o menor passo que ainda conta. Atrasar não é fracassar. Manhã no Hoje, noite no Diário, um passo pequeno por dia.'}
   ];
   var tourIdx=null;
@@ -1482,6 +1484,72 @@
     state.lastShareAt=Date.now();
     ci=null; ciDone=true;
     save(); toast(state.marcos.some(function(m){return m.pct>=100&&!m.feito;})?'Você chegou a 100%! Conclua o marco em Meu plano.':'Progresso registrado.'); render();
+  }
+  /* ---------- cópia de segurança ---------- */
+  var bkPending=null;
+  function bkCardHTML(){
+    var lb=state.lastBackupAt||0;
+    var last=lb?'Última cópia: '+esc(new Date(lb).toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'}))+'.':'Você ainda não salvou nenhuma cópia.';
+    var conf='';
+    if(bkPending){
+      var when=bkPending.when?new Date(bkPending.when).toLocaleDateString('pt-BR',{day:'numeric',month:'long',year:'numeric'}):'data não informada';
+      conf='<div class="note" style="margin-top:12px"><p style="margin:0 0 6px"><strong>Importar a cópia de '+esc(when)+'?</strong></p>'+
+        '<p style="margin:0 0 10px">Isso substitui tudo o que está neste aparelho agora. Se quiser guardar o que existe aqui, toque em Cancelar e salve uma cópia antes.</p>'+
+        '<div class="actions" style="margin-top:0"><button type="button" class="btn btn-danger btn-sm" data-act="bk-yes">Sim, importar</button><button type="button" class="btn btn-ghost btn-sm" data-act="bk-no">Cancelar</button></div></div>';
+    }
+    return '<section class="card" id="backup-card"><h2 class="h2">Cópia de segurança</h2>'+
+      '<p class="muted" style="margin:0 0 6px">Salve um arquivo com tudo o que você escreveu e guarde no seu Drive. A sugestão é fazer isso toda segunda-feira.</p>'+
+      '<p class="muted small" style="margin:0 0 12px" id="bk-last">'+last+'</p>'+
+      '<div class="actions" style="margin-top:0"><button type="button" class="btn btn-primary" data-act="bk-save">Salvar cópia de segurança</button><button type="button" class="btn btn-ghost" data-act="bk-import">Importar cópia</button></div>'+
+      '<input type="file" id="bk-file" accept=".json,application/json" hidden>'+
+      '<p class="muted small" style="margin:10px 0 0">No celular, na janela que abrir, escolha o Google Drive e uma pasta, por exemplo “Meu Plano 2027 · Backup”. Se trocar de aparelho, abra o link do app, toque em Importar e escolha o arquivo mais recente.</p>'+conf+'</section>';
+  }
+  function bkSave(){
+    var now=Date.now();
+    var snap=clone(state); snap.lastBackupAt=now;
+    var pack={app:'meu-plano-2027',formato:1,exportadoEm:new Date(now).toISOString(),dados:snap};
+    var name='meu-plano-2027-backup-'+isoOf(today0())+'.json';
+    var text=JSON.stringify(pack);
+    function done(msg){ state.lastBackupAt=now; save(); toast(msg); render({keep:true}); }
+    function download(){
+      try{
+        var blob=new Blob([text],{type:'application/json'}), url=URL.createObjectURL(blob), a=document.createElement('a');
+        a.href=url; a.download=name; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        setTimeout(function(){ URL.revokeObjectURL(url); },4000);
+        done('Arquivo salvo no aparelho. Mande para o seu Drive.');
+      }catch(e){ toast('Não consegui salvar o arquivo. Use Copiar plano em texto.'); }
+    }
+    try{
+      var file=new File([text],name,{type:'application/json'});
+      if(navigator.canShare&&navigator.canShare({files:[file]})&&navigator.share){
+        navigator.share({files:[file],title:'Meu Plano 2027 · cópia de segurança'}).then(function(){ done('Cópia enviada. Confira se ela está no seu Drive.'); }).catch(function(err){
+          if(err&&err.name==='AbortError') toast('Cópia cancelada. Nada foi salvo.'); else download();
+        });
+      } else download();
+    }catch(e){ download(); }
+  }
+  function bkRead(input){
+    var f=input.files&&input.files[0]; input.value='';
+    if(!f) return;
+    var r=new FileReader();
+    r.onload=function(){
+      var o=null;
+      try{ o=JSON.parse(String(r.result)); }catch(e){}
+      if(!o||o.app!=='meu-plano-2027'||!o.dados||typeof o.dados!=='object'||Number(o.formato)>1){ toast('Esse arquivo não parece uma cópia do Meu Plano 2027.'); return; }
+      bkPending={data:merge(blank(),o.dados),when:o.exportadoEm||''};
+      render({keep:true});
+      var c=document.getElementById('backup-card'); if(c&&c.scrollIntoView){ try{ c.scrollIntoView({block:'center'}); }catch(e){} }
+    };
+    r.onerror=function(){ toast('Não consegui ler o arquivo.'); };
+    r.readAsText(f);
+  }
+  function bkApply(){
+    if(!bkPending) return;
+    var d=bkPending.data; bkPending=null;
+    d.seen=d.seen||!!(d.concurso||'').trim();
+    d.view=d.seen?'hoje':'wizard';
+    state=d; weekRef=null; draft=null; ci=null; fin=null; celebra=null; rmDraft=null;
+    save(); toast('Cópia importada. Seu plano voltou.'); render();
   }
   function doCopy(){
     var txt=planText();
@@ -1755,6 +1823,10 @@
     var act=b.getAttribute('data-act'), date=b.getAttribute('data-date'), id=b.getAttribute('data-id'), val=b.getAttribute('data-val');
     if(tourIdx!==null&&act==='view') tourClose(false);
     if(act==='view') setView(b.getAttribute('data-view'));
+    else if(act==='bk-save') bkSave();
+    else if(act==='bk-import'){ var bf=document.getElementById('bk-file'); if(bf) bf.click(); }
+    else if(act==='bk-yes') bkApply();
+    else if(act==='bk-no'){ bkPending=null; render({keep:true}); }
     else if(act==='tour-start') tourStart();
     else if(act==='tour-next') tourShow(tourIdx+1);
     else if(act==='tour-prev') tourShow(tourIdx-1);
@@ -1820,6 +1892,7 @@
   function onInput(e){
     var t=e.target;
     if(!t||!t.getAttribute) return;
+    if(t.id==='bk-file'){ bkRead(t); return; }
     if(t.getAttribute('data-fin')&&fin){ fin.sent=t.value; return; }
     var rk=t.getAttribute('data-rm'); if(rk&&rmDraft){ rmDraft[rk]=t.value; return; }
     if(t.id==='sumtext'){ var lk=document.getElementById('sumlink'); if(lk) lk.href=waLink(t.value); return; }
